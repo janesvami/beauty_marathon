@@ -2,11 +2,17 @@ package ani.beautymarathon.service;
 
 import ani.beautymarathon.entity.ClosedState;
 import ani.beautymarathon.entity.MoMeasurement;
+import ani.beautymarathon.entity.User;
+import ani.beautymarathon.entity.UserMeasurement;
 import ani.beautymarathon.entity.WkMeasurement;
 import ani.beautymarathon.exception.MoClosedException;
+import ani.beautymarathon.exception.UserNotFoundException;
+import ani.beautymarathon.exception.WkMeasurementNotFoundException;
 import ani.beautymarathon.repository.MoMeasurementRepository;
 import ani.beautymarathon.repository.UserMeasurementRepository;
+import ani.beautymarathon.repository.UserRepository;
 import ani.beautymarathon.repository.WkMeasurementRepository;
+import ani.beautymarathon.view.measurement.CreateUserMeasurementView;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,13 +26,15 @@ public class MeasurementService {
     private final MoMeasurementRepository moMeasurementRepository;
     private final WkMeasurementRepository wkMeasurementRepository;
     private final UserMeasurementRepository userMeasurementRepository;
+    private final UserRepository userRepository;
 
     public MeasurementService(MoMeasurementRepository moMeasurementRepository,
                               WkMeasurementRepository wkMeasurementRepository,
-                              UserMeasurementRepository userMeasurementRepository) {
+                              UserMeasurementRepository userMeasurementRepository, UserRepository userRepository) {
         this.moMeasurementRepository = moMeasurementRepository;
         this.wkMeasurementRepository = wkMeasurementRepository;
         this.userMeasurementRepository = userMeasurementRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -56,11 +64,39 @@ public class MeasurementService {
                     wkMeasurement.setMoMeasurement(savedMonth);
                 }
         );
-
         WkMeasurement saved = wkMeasurementRepository.save(wkMeasurement);
         log.info("Saved week: {}", saved);
         return saved;
     }
 
+    @Transactional
+    public UserMeasurement createUserMeasurement
+            (CreateUserMeasurementView newUserMeasurementView){
+        final UserMeasurement newUserMeasurement = new UserMeasurement();
 
+        User savedUser = userRepository.findById(newUserMeasurementView.userId())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        WkMeasurement savedWkMeasurement = wkMeasurementRepository
+                .findById(newUserMeasurementView.wkMeasurementId())
+                .orElseThrow(() -> new WkMeasurementNotFoundException("WkMeasurement not found"));
+
+        newUserMeasurement.setUser(savedUser);
+        newUserMeasurement.setWkMeasurement(savedWkMeasurement);
+        newUserMeasurement.setWeight(newUserMeasurementView.weight());
+        newUserMeasurement.setCommentary(newUserMeasurementView.commentary());
+        newUserMeasurement.setDiaryPoint(newUserMeasurementView.diaryPoint());
+        newUserMeasurement.setAlcoholFreePoints(newUserMeasurementView.alcoholFreePoints());
+        newUserMeasurement.setSleepPoint(newUserMeasurementView.sleepPoint());
+        newUserMeasurement.setStepPoint(newUserMeasurementView.stepPoint());
+        newUserMeasurement.setWaterPoint(newUserMeasurementView.waterPoint());
+        newUserMeasurement.setWeightPoint(newUserMeasurementView.weightPoint());
+
+        return save(newUserMeasurement);
+    }
+
+    private UserMeasurement save(UserMeasurement userMeasurement) {
+        UserMeasurement savedUserMeasurement = userMeasurementRepository.save(userMeasurement);
+        log.info("User measurement saved: {} ", savedUserMeasurement);
+        return savedUserMeasurement;
+    }
 }

@@ -8,12 +8,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_measurement")
 public class UserMeasurement {
 
@@ -23,7 +29,7 @@ public class UserMeasurement {
     private Long id;
 
     @Column(name = "weight")
-    private Double weight;
+    private BigDecimal weight;
 
     @Column(name = "weight_point")
     private Integer weightPoint;
@@ -54,25 +60,8 @@ public class UserMeasurement {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public UserMeasurement(Long id, Double weight, Integer weightPoint, Integer sleepPoint,
-                           Integer waterPoint, Integer stepPoint, Integer diaryPoint,
-                           Integer alcoholFreePoints, String commentary, WkMeasurement wkMeasurement, User user) {
-        this.id = id;
-        this.weight = weight;
-        this.weightPoint = weightPoint;
-        this.sleepPoint = sleepPoint;
-        this.waterPoint = waterPoint;
-        this.stepPoint = stepPoint;
-        this.diaryPoint = diaryPoint;
-        this.alcoholFreePoints = alcoholFreePoints;
-        this.commentary = commentary;
-        this.wkMeasurement = wkMeasurement;
-        this.user = user;
-    }
-
-    public UserMeasurement() {
-
-    }
+    @Column(name = "total_point")
+    private Integer totalPoint;
 
     @Override
     public String toString() {
