@@ -60,7 +60,7 @@ public class UserMeasurement {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "total_point")
+    @Column(name = "total_point", updatable = false, insertable = false)
     private Integer totalPoint;
 
     @Override
