@@ -7,6 +7,7 @@ import ani.beautymarathon.entity.UserMeasurement;
 import ani.beautymarathon.entity.WkMeasurement;
 import ani.beautymarathon.exception.MoClosedException;
 import ani.beautymarathon.exception.UserNotFoundException;
+import ani.beautymarathon.exception.WkMeasurementClosedException;
 import ani.beautymarathon.exception.WkMeasurementNotFoundException;
 import ani.beautymarathon.repository.MoMeasurementRepository;
 import ani.beautymarathon.repository.UserMeasurementRepository;
@@ -38,19 +39,19 @@ public class MeasurementService {
     }
 
     @Transactional
-    public WkMeasurement createWkMeasurement(WkMeasurement wkMeasurement){
+    public WkMeasurement createWkMeasurement(WkMeasurement wkMeasurement) {
         final LocalDate measurementDate = wkMeasurement.getMeasurementDate();
         final int year = measurementDate.getYear();
         final int month = measurementDate.getMonthValue();
         Optional<WkMeasurement> byMeasurementDate = wkMeasurementRepository.findByMeasurementDate(measurementDate);
-        if(byMeasurementDate.isPresent()){
+        if (byMeasurementDate.isPresent()) {
             throw new IllegalArgumentException("WkMeasurement with date " + measurementDate + " already exists");
         }
         Optional<MoMeasurement> foundMonth = moMeasurementRepository.findByYearAndMonthNumber(year, month);
         foundMonth.ifPresentOrElse(
                 (moMeasurement) -> {
                     ClosedState closedState = moMeasurement.getClosedState();
-                    if (ClosedState.CLOSED == closedState){
+                    if (ClosedState.CLOSED == closedState) {
                         String errorText = "Found month " + month + "-" + year + " is closed";
                         throw new MoClosedException(errorText);
                     }
@@ -71,17 +72,21 @@ public class MeasurementService {
 
     @Transactional
     public UserMeasurement createUserMeasurement
-            (CreateUserMeasurementView newUserMeasurementView){
+            (CreateUserMeasurementView newUserMeasurementView) {
         final UserMeasurement newUserMeasurement = new UserMeasurement();
 
-        User savedUser = userRepository.findById(newUserMeasurementView.userId())
+        User user = userRepository.findById(newUserMeasurementView.userId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        WkMeasurement savedWkMeasurement = wkMeasurementRepository
+        WkMeasurement wkMeasurement = wkMeasurementRepository
                 .findById(newUserMeasurementView.wkMeasurementId())
                 .orElseThrow(() -> new WkMeasurementNotFoundException("WkMeasurement not found"));
 
-        newUserMeasurement.setUser(savedUser);
-        newUserMeasurement.setWkMeasurement(savedWkMeasurement);
+        if (wkMeasurement.getClosedState() == ClosedState.CLOSED) {
+            throw new WkMeasurementClosedException("The week is closed");
+        }
+
+        newUserMeasurement.setUser(user);
+        newUserMeasurement.setWkMeasurement(wkMeasurement);
         newUserMeasurement.setWeight(newUserMeasurementView.weight());
         newUserMeasurement.setCommentary(newUserMeasurementView.commentary());
         newUserMeasurement.setDiaryPoint(newUserMeasurementView.diaryPoint());

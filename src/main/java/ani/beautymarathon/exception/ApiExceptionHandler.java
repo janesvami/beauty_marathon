@@ -33,7 +33,7 @@ public class ApiExceptionHandler {
         return constructApiErrorWithHttpStatus(apiError);
     }
 
-    @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         var errs = ex.getBindingResult()
                 .getFieldErrors()
@@ -44,6 +44,37 @@ public class ApiExceptionHandler {
         final var apiError = new ApiError(HttpStatus.BAD_REQUEST, "Request validation failed: " + errs);
         return constructApiErrorWithHttpStatus(apiError);
     }
+
+    @ExceptionHandler(MoClosedException.class)
+    public ResponseEntity<ApiError> handleMoClosed(MoClosedException ex) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        ApiError apiError = new ApiError(
+                badRequest,
+                ex.getMessage()
+        );
+        return constructApiErrorWithHttpStatus(apiError);
+    }
+
+    @ExceptionHandler(WkMeasurementNotFoundException.class)
+    public ResponseEntity<ApiError> handleWkMeasurementNotFound(WkMeasurementNotFoundException ex) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        ApiError apiError = new ApiError(
+                badRequest,
+                ex.getMessage()
+        );
+        return constructApiErrorWithHttpStatus(apiError);
+    }
+
+    @ExceptionHandler(WkMeasurementClosedException.class)
+    public ResponseEntity<ApiError> handleWkMeasurementClosed(WkMeasurementClosedException ex) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        ApiError apiError = new ApiError(
+                badRequest,
+                ex.getMessage()
+        );
+        return constructApiErrorWithHttpStatus(apiError);
+    }
+
     private ResponseEntity<ApiError> constructApiErrorWithHttpStatus(ApiError apiError) {
         final var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
