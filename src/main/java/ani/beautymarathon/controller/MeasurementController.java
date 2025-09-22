@@ -34,7 +34,7 @@ public class MeasurementController {
         newWkMeasurement.setMeasurementDate(newWkMeasurementView.measurementDate());
         newWkMeasurement.setCommentary(newWkMeasurementView.commentary());
 
-        WkMeasurement createdWkMeasurement = measurementService.createWkMeasurement(newWkMeasurement);
+        final WkMeasurement createdWkMeasurement = measurementService.createWkMeasurement(newWkMeasurement);
         return constructWeekMeasurementView(createdWkMeasurement);
     }
 
@@ -42,13 +42,13 @@ public class MeasurementController {
     public GetUserMeasurementView createUserMeasurement
             (@Valid @RequestBody CreateUserMeasurementView newUserMeasurementView) {
 
-        UserMeasurement createdUserMeasurement = measurementService.createUserMeasurement(newUserMeasurementView);
+        final UserMeasurement createdUserMeasurement = measurementService.createUserMeasurement(newUserMeasurementView);
         return constructUserMeasurementView(createdUserMeasurement);
     }
 
     private GetWkMeasurementView constructWeekMeasurementView(WkMeasurement wkMeasurement) {
-        MoMeasurement moMeasurement = wkMeasurement.getMoMeasurement();
-        GetMoMeasurementView moMeasurementView = new GetMoMeasurementView(
+        final MoMeasurement moMeasurement = wkMeasurement.getMoMeasurement();
+        final GetMoMeasurementView moMeasurementView = new GetMoMeasurementView(
                 moMeasurement.getId(),
                 moMeasurement.getClosedState(),
                 moMeasurement.getYear(),
@@ -65,23 +65,23 @@ public class MeasurementController {
 
     private GetUserMeasurementView constructUserMeasurementView(UserMeasurement userMeasurement) {
 
-        WkMeasurement wkMeasurement = userMeasurement.getWkMeasurement();
-        MoMeasurement moMeasurement = wkMeasurement.getMoMeasurement();
-        GetMoMeasurementView moMeasurementView = new GetMoMeasurementView(
+        final WkMeasurement wkMeasurement = userMeasurement.getWkMeasurement();
+        final MoMeasurement moMeasurement = wkMeasurement.getMoMeasurement();
+        final GetMoMeasurementView moMeasurementView = new GetMoMeasurementView(
                 moMeasurement.getId(),
                 moMeasurement.getClosedState(),
                 moMeasurement.getYear(),
                 moMeasurement.getMonthNumber()
         );
-        GetWkMeasurementView wkMeasurementView = new GetWkMeasurementView(
+        final GetWkMeasurementView wkMeasurementView = new GetWkMeasurementView(
                 wkMeasurement.getId(),
                 wkMeasurement.getMeasurementDate(),
                 wkMeasurement.getClosedState(),
                 wkMeasurement.getCommentary(),
                 moMeasurementView
         );
-        User user = userMeasurement.getUser();
-        GetUserView userView = new GetUserView(
+        final User user = userMeasurement.getUser();
+        final GetUserView userView = new GetUserView(
                 user.getId(),
                 user.getName(),
                 user.getStartWeight(),

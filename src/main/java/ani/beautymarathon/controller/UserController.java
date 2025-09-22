@@ -6,6 +6,7 @@ import ani.beautymarathon.service.UserService;
 import ani.beautymarathon.view.CreateUserView;
 import ani.beautymarathon.view.GetUserView;
 import ani.beautymarathon.view.UpdateUserView;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,13 +36,13 @@ public class UserController {
         newUser.setDeletedState(DeletedState.NOT_DELETED);
         newUser.setCreationDate(LocalDate.now());
 
-        User savedUser = userService.save(newUser);
+        final User savedUser = userService.save(newUser);
         return constructUserView(savedUser);
     }
 
     @GetMapping("/all")
     public List<GetUserView> findAll() {
-        List<User> users = userService.findAll();
+        final List<User> users = userService.findAll();
         return users.stream()
                 .map(this::constructUserView)
                 .toList();
@@ -50,13 +50,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public GetUserView getById(@PathVariable long id) {
-        User user = userService.getById(id);
+        final User user = userService.getById(id);
         return constructUserView(user);
     }
 
     @PutMapping("/update/{id}")
     public GetUserView updateUserView(@PathVariable Long id, @RequestBody UpdateUserView userView) {
-        User updateUser = userService.update(id, userView);
+        final User updateUser = userService.update(id, userView);
         return constructUserView(updateUser);
     }
 

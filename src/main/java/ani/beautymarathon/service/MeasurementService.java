@@ -76,9 +76,9 @@ public class MeasurementService {
             (CreateUserMeasurementView newUserMeasurementView) {
         final UserMeasurement newUserMeasurement = new UserMeasurement();
 
-        User user = userRepository.findById(newUserMeasurementView.userId())
+        final User user = userRepository.findById(newUserMeasurementView.userId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        WkMeasurement wkMeasurement = wkMeasurementRepository
+        final WkMeasurement wkMeasurement = wkMeasurementRepository
                 .findById(newUserMeasurementView.wkMeasurementId())
                 .orElseThrow(() -> new EntityNotFoundException("WkMeasurement not found"));
 
@@ -104,7 +104,7 @@ public class MeasurementService {
     }
 
     private UserMeasurement save(UserMeasurement userMeasurement) {
-        UserMeasurement savedUserMeasurement = userMeasurementRepository.save(userMeasurement);
+        final UserMeasurement savedUserMeasurement = userMeasurementRepository.save(userMeasurement);
         log.info("User measurement saved: {} ", savedUserMeasurement);
         return savedUserMeasurement;
     }

@@ -47,16 +47,6 @@ public class MoMeasurement {
     @OneToMany(mappedBy = "moMeasurement")
     private List<WkMeasurement> wkMeasurements;
 
-    public MoMeasurement(Long id, LocalDate date, ClosedState closedState, Integer year,
-                         Integer monthNumber, List<WkMeasurement> wkMeasurements) {
-        this.id = id;
-        this.moDate = date;
-        this.closedState = closedState;
-        this.year = year;
-        this.monthNumber = monthNumber;
-        this.wkMeasurements = wkMeasurements;
-    }
-
     public MoMeasurement() {
 
     }
