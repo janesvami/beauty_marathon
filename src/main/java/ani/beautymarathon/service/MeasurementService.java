@@ -1,19 +1,20 @@
 package ani.beautymarathon.service;
 
 import ani.beautymarathon.entity.ClosedState;
+import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.MoMeasurement;
 import ani.beautymarathon.entity.User;
 import ani.beautymarathon.entity.UserMeasurement;
 import ani.beautymarathon.entity.WkMeasurement;
 import ani.beautymarathon.exception.MoClosedException;
-import ani.beautymarathon.exception.UserNotFoundException;
+import ani.beautymarathon.exception.UserDeletedException;
 import ani.beautymarathon.exception.WkMeasurementClosedException;
-import ani.beautymarathon.exception.WkMeasurementNotFoundException;
 import ani.beautymarathon.repository.MoMeasurementRepository;
 import ani.beautymarathon.repository.UserMeasurementRepository;
 import ani.beautymarathon.repository.UserRepository;
 import ani.beautymarathon.repository.WkMeasurementRepository;
 import ani.beautymarathon.view.measurement.CreateUserMeasurementView;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -76,11 +77,14 @@ public class MeasurementService {
         final UserMeasurement newUserMeasurement = new UserMeasurement();
 
         User user = userRepository.findById(newUserMeasurementView.userId())
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         WkMeasurement wkMeasurement = wkMeasurementRepository
                 .findById(newUserMeasurementView.wkMeasurementId())
-                .orElseThrow(() -> new WkMeasurementNotFoundException("WkMeasurement not found"));
+                .orElseThrow(() -> new EntityNotFoundException("WkMeasurement not found"));
 
+        if(user.getDeletedState() == DeletedState.DELETED){
+            throw new UserDeletedException("User is deleted");
+        }
         if (wkMeasurement.getClosedState() == ClosedState.CLOSED) {
             throw new WkMeasurementClosedException("The week is closed");
         }

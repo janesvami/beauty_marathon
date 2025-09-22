@@ -75,6 +75,16 @@ public class ApiExceptionHandler {
         return constructApiErrorWithHttpStatus(apiError);
     }
 
+    @ExceptionHandler(UserDeletedException.class)
+    public ResponseEntity<ApiError> handleUserDeleted(UserDeletedException ex) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        ApiError apiError = new ApiError(
+                badRequest,
+                ex.getMessage()
+        );
+        return constructApiErrorWithHttpStatus(apiError);
+    }
+
     private ResponseEntity<ApiError> constructApiErrorWithHttpStatus(ApiError apiError) {
         final var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
