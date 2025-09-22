@@ -55,16 +55,6 @@ public class ApiExceptionHandler {
         return constructApiErrorWithHttpStatus(apiError);
     }
 
-    @ExceptionHandler(WkMeasurementNotFoundException.class)
-    public ResponseEntity<ApiError> handleWkMeasurementNotFound(WkMeasurementNotFoundException ex) {
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-        ApiError apiError = new ApiError(
-                badRequest,
-                ex.getMessage()
-        );
-        return constructApiErrorWithHttpStatus(apiError);
-    }
-
     @ExceptionHandler(WkMeasurementClosedException.class)
     public ResponseEntity<ApiError> handleWkMeasurementClosed(WkMeasurementClosedException ex) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
