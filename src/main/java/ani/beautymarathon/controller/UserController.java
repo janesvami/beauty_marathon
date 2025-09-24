@@ -5,6 +5,7 @@ import ani.beautymarathon.entity.User;
 import ani.beautymarathon.service.UserService;
 import ani.beautymarathon.view.CreateUserView;
 import ani.beautymarathon.view.GetUserView;
+import ani.beautymarathon.view.UpdateUserStatusView;
 import ani.beautymarathon.view.UpdateUserView;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,12 @@ public class UserController {
     public GetUserView getById(@PathVariable long id) {
         final User user = userService.getById(id);
         return constructUserView(user);
+    }
+
+    @PutMapping("/status/{id}")
+    public GetUserView updateUserView(@PathVariable Long id, @RequestBody UpdateUserStatusView userStatusView) {
+        final User updateUserStatus = userService.updateStatus(id, userStatusView);
+        return constructUserView(updateUserStatus);
     }
 
     @PutMapping("/update/{id}")
