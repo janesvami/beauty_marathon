@@ -1,7 +1,10 @@
 package ani.beautymarathon.service;
 
+import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.User;
+import ani.beautymarathon.exception.UserDeletedException;
 import ani.beautymarathon.repository.UserRepository;
+import ani.beautymarathon.view.UpdateUserStatusView;
 import ani.beautymarathon.view.UpdateUserView;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +27,7 @@ public class UserService {
         return user;
     }
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
@@ -35,6 +38,11 @@ public class UserService {
 
     public User update(long id, UpdateUserView userView) {
         final User user = getById(id);
+
+        if (user.getDeletedState() == DeletedState.DELETED) {
+            throw new UserDeletedException("User with id " + id + " is deleted");
+        }
+
         user.setName(userView.name());
         user.setStartWeight(userView.startWeight());
         user.setTargetWeight(userView.targetWeight());
@@ -42,5 +50,14 @@ public class UserService {
         final User updatedUser = userRepository.save(user);
         log.info("User with id {} has been updated {}", id, updatedUser);
         return updatedUser;
+    }
+
+    public User updateStatus(long id, UpdateUserStatusView statusUserView) {
+        final User user = getById(id);
+        user.setDeletedState(statusUserView.deletedState());
+
+        final User updatedUserStatus = userRepository.save(user);
+        log.info("Status of user with id {} has been updated {}", id, updatedUserStatus);
+        return updatedUserStatus;
     }
 }
