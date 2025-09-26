@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/status/{id}")
-    public GetUserView updateUserStatusView(@PathVariable Long id, @RequestParam("newState") DeletedState newState) {
+    public GetUserView updateUserStatus(@PathVariable Long id, @RequestParam("newState") DeletedState newState) {
         final User updatedUser = userService.updateStatus(id, newState);
         return constructUserView(updatedUser);
     }
