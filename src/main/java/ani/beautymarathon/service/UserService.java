@@ -4,7 +4,6 @@ import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.User;
 import ani.beautymarathon.exception.UserDeletedException;
 import ani.beautymarathon.repository.UserRepository;
-import ani.beautymarathon.view.UpdateUserStatusView;
 import ani.beautymarathon.view.UpdateUserView;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class UserService {
         final User user = getById(id);
 
         if (user.getDeletedState() == DeletedState.DELETED) {
-            throw new UserDeletedException("User with id " + id + " is deleted");
+            throw new UserDeletedException("User with id " + id + " is deleted. Cannot update");
         }
 
         user.setName(userView.name());
@@ -52,12 +51,12 @@ public class UserService {
         return updatedUser;
     }
 
-    public User updateStatus(long id, UpdateUserStatusView statusUserView) {
+    public User updateStatus(long id, DeletedState deletedState) {
         final User user = getById(id);
-        user.setDeletedState(statusUserView.deletedState());
+        user.setDeletedState(deletedState);
 
-        final User updatedUserStatus = userRepository.save(user);
-        log.info("Status of user with id {} has been updated {}", id, updatedUserStatus);
-        return updatedUserStatus;
+        final User updated = userRepository.save(user);
+        log.info("Status of user with id {} has been updated {}", id, updated);
+        return updated;
     }
 }
