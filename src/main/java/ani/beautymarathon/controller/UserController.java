@@ -35,7 +35,6 @@ public class UserController {
             description = "Creating a new user and saving it in the DB with returning it to the client",
             responses = {
                     @ApiResponse(responseCode = "200", description = "The user was created successfully"),
-                    @ApiResponse(responseCode = "409", description = "The user already exists")
             })
     public GetUserView createUser(@Valid @RequestBody CreateUserView newUserView) {
         final User newUser = new User();
