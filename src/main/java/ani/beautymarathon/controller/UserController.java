@@ -6,6 +6,8 @@ import ani.beautymarathon.service.UserService;
 import ani.beautymarathon.view.CreateUserView;
 import ani.beautymarathon.view.GetUserView;
 import ani.beautymarathon.view.UpdateUserView;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +31,12 @@ public class UserController {
     }
 
     @PostMapping("/create")
+    @Operation(summary = "Creating a new marathon racer",
+            description = "Creating a new user and saving it in the DB with returning it to the client",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "The user was created successfully"),
+                    @ApiResponse(responseCode = "409", description = "The user already exists")
+            })
     public GetUserView createUser(@Valid @RequestBody CreateUserView newUserView) {
         final User newUser = new User();
         newUser.setName(newUserView.name());
