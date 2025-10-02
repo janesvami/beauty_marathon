@@ -13,3 +13,10 @@ spring:
     driver-class-name: org.postgresql.Driver
     clean-disabled: false
     validate-on-migrate: false
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.use_sql_comments: true
+      hibernate.highlight_sql: true

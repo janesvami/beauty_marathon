@@ -47,7 +47,7 @@ public class UserMeasurement {
     private Integer diaryPoint;
 
     @Column(name = "alcohol_free_points")
-    private Integer alcoholFreePoints;
+    private Integer alcoholFreePoint;
 
     @Column(name = "commentary")
     private String commentary;
@@ -73,7 +73,7 @@ public class UserMeasurement {
                 "\nwater points: " + waterPoint +
                 "\nstep points: " + stepPoint +
                 "\ndiary points: " + diaryPoint +
-                "\nalocohol-free points: " + alcoholFreePoints +
+                "\nalocohol-free points: " + alcoholFreePoint +
                 "\n\nCommentary: " + commentary
                 ;
     }

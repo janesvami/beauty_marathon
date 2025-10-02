@@ -17,6 +17,8 @@ import ani.beautymarathon.view.measurement.CreateUserMeasurementView;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -82,7 +84,7 @@ public class MeasurementService {
                 .findById(newUserMeasurementView.wkMeasurementId())
                 .orElseThrow(() -> new EntityNotFoundException("WkMeasurement not found"));
 
-        if(user.getDeletedState() == DeletedState.DELETED){
+        if (user.getDeletedState() == DeletedState.DELETED) {
             throw new UserDeletedException("User is deleted");
         }
         if (wkMeasurement.getClosedState() == ClosedState.CLOSED) {
@@ -94,13 +96,17 @@ public class MeasurementService {
         newUserMeasurement.setWeight(newUserMeasurementView.weight());
         newUserMeasurement.setCommentary(newUserMeasurementView.commentary());
         newUserMeasurement.setDiaryPoint(newUserMeasurementView.diaryPoint());
-        newUserMeasurement.setAlcoholFreePoints(newUserMeasurementView.alcoholFreePoints());
+        newUserMeasurement.setAlcoholFreePoint(newUserMeasurementView.alcoholFreePoints());
         newUserMeasurement.setSleepPoint(newUserMeasurementView.sleepPoint());
         newUserMeasurement.setStepPoint(newUserMeasurementView.stepPoint());
         newUserMeasurement.setWaterPoint(newUserMeasurementView.waterPoint());
         newUserMeasurement.setWeightPoint(newUserMeasurementView.weightPoint());
 
         return save(newUserMeasurement);
+    }
+
+    public Page<UserMeasurement> getAllUserMeasurements(Pageable pageable) {
+        return userMeasurementRepository.findAll(pageable);
     }
 
     private UserMeasurement save(UserMeasurement userMeasurement) {

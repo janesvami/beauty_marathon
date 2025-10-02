@@ -13,6 +13,7 @@ public record GetUserMeasurementView(
         Integer stepPoint,
         Integer diaryPoint,
         Integer alcoholFreePoints,
+        Integer totalPoints,
         String commentary,
         GetWkMeasurementView wkMeasurement,
         GetUserView user

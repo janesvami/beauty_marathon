@@ -12,10 +12,14 @@ import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.measurement.GetUserMeasurementView;
 import ani.beautymarathon.view.measurement.GetWkMeasurementView;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/measurements")
@@ -44,6 +48,12 @@ public class MeasurementController {
 
         final UserMeasurement createdUserMeasurement = measurementService.createUserMeasurement(newUserMeasurementView);
         return constructUserMeasurementView(createdUserMeasurement);
+    }
+
+    @GetMapping("user/all")
+    public Page<GetUserMeasurementView> getAllMeasurements(Pageable pageable) {
+        return measurementService.getAllUserMeasurements(pageable)
+                .map(this::constructUserMeasurementView);
     }
 
     private GetWkMeasurementView constructWeekMeasurementView(WkMeasurement wkMeasurement) {
@@ -97,7 +107,8 @@ public class MeasurementController {
                 userMeasurement.getWaterPoint(),
                 userMeasurement.getStepPoint(),
                 userMeasurement.getDiaryPoint(),
-                userMeasurement.getAlcoholFreePoints(),
+                userMeasurement.getAlcoholFreePoint(),
+                userMeasurement.getTotalPoint(),
                 userMeasurement.getCommentary(),
                 wkMeasurementView,
                 userView
