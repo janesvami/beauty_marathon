@@ -109,6 +109,10 @@ public class MeasurementService {
         return userMeasurementRepository.findAll(pageable);
     }
 
+    public Page<MoMeasurement> getCascadeOfAllMeasurements(Pageable pageable) {
+        return moMeasurementRepository.findAll(pageable);
+    }
+
     private UserMeasurement save(UserMeasurement userMeasurement) {
         final UserMeasurement savedUserMeasurement = userMeasurementRepository.save(userMeasurement);
         log.info("User measurement saved: {} ", savedUserMeasurement);
