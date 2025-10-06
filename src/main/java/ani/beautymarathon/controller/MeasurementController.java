@@ -67,7 +67,7 @@ public class MeasurementController {
 
     @PostMapping("/user/all")
     public Page<GetUserMeasurementView> getAllMeasurements(
-            @RequestBody UserMeasurementFilter filter,
+            @Valid @RequestBody UserMeasurementFilter filter,
             @ParameterObject Pageable pageable
     ) {
         return measurementService.getAllUserMeasurements(filter, pageable)

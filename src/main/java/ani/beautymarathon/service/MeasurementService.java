@@ -118,24 +118,24 @@ public class MeasurementService {
 
     private Page<UserMeasurement> searchUserMeasurementsByQbe(UserMeasurementFilter filter, Pageable pageable) {
         final var probe = new UserMeasurement();
-        final var userFilter = filter.userFilter();
-        final var weekFilter = filter.weekFilter();
+        final var filterUser = filter.user();
+        final var filterWeek = filter.week();
 
-        if (userFilter != null) {
+        if (filterUser != null) {
             var user = new User();
-            user.setName(userFilter.name());
-            user.setDeletedState(userFilter.state());
+            user.setName(filterUser.name());
+            user.setDeletedState(filterUser.deletedState());
             probe.setUser(user);
         }
-        if (filter.weekFilter() != null) {
+        if (filterWeek != null) {
             final var mo = new MoMeasurement();
-            mo.setYear(weekFilter.year());
-            mo.setMonthNumber(weekFilter.month());
-            mo.setClosedState(weekFilter.moClosedState());
+            mo.setYear(filterWeek.year());
+            mo.setMonthNumber(filterWeek.month());
+            mo.setClosedState(filterWeek.moClosedState());
 
             final var wk = new WkMeasurement();
             wk.setMoMeasurement(mo);
-            wk.setClosedState(weekFilter.wkClosedState());
+            wk.setClosedState(filterWeek.wkClosedState());
             probe.setWkMeasurement(wk);
         }
 
