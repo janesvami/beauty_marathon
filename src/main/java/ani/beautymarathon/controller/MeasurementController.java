@@ -6,6 +6,7 @@ import ani.beautymarathon.entity.User;
 import ani.beautymarathon.entity.UserMeasurement;
 import ani.beautymarathon.entity.WkMeasurement;
 import ani.beautymarathon.service.MeasurementService;
+import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import ani.beautymarathon.view.CascadeGetUserView;
 import ani.beautymarathon.view.GetUserView;
 import ani.beautymarathon.view.measurement.CascadeGetMoMeasurementView;
@@ -17,6 +18,7 @@ import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.measurement.GetUserMeasurementView;
 import ani.beautymarathon.view.measurement.GetWkMeasurementView;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,9 +65,12 @@ public class MeasurementController {
                 .map(this::constructCascadeMoMeasurementView);
     }
 
-    @GetMapping("/user/all")
-    public Page<GetUserMeasurementView> getAllMeasurements(Pageable pageable) {
-        return measurementService.getAllUserMeasurements(pageable)
+    @PostMapping("/user/all")
+    public Page<GetUserMeasurementView> getAllMeasurements(
+            @RequestBody UserMeasurementFilter filter,
+            @ParameterObject Pageable pageable
+    ) {
+        return measurementService.getAllUserMeasurements(filter, pageable)
                 .map(this::constructUserMeasurementView);
     }
 

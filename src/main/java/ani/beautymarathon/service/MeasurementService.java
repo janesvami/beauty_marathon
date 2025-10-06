@@ -14,9 +14,12 @@ import ani.beautymarathon.repository.UserMeasurementRepository;
 import ani.beautymarathon.repository.UserRepository;
 import ani.beautymarathon.repository.WkMeasurementRepository;
 import ani.beautymarathon.view.measurement.CreateUserMeasurementView;
+import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -105,8 +108,47 @@ public class MeasurementService {
         return save(newUserMeasurement);
     }
 
-    public Page<UserMeasurement> getAllUserMeasurements(Pageable pageable) {
-        return userMeasurementRepository.findAll(pageable);
+    public Page<UserMeasurement> getAllUserMeasurements(UserMeasurementFilter filter, Pageable pageable) {
+        if (filter != null) {
+            return searchUserMeasurementsByQbe(filter, pageable);
+        } else {
+            return userMeasurementRepository.findAll(pageable);
+        }
+    }
+
+    private Page<UserMeasurement> searchUserMeasurementsByQbe(UserMeasurementFilter filter, Pageable pageable) {
+        final var probe = new UserMeasurement();
+        final var userFilter = filter.userFilter();
+        final var weekFilter = filter.weekFilter();
+
+        if (userFilter != null) {
+            var user = new User();
+            user.setName(userFilter.name());
+            user.setDeletedState(userFilter.state());
+            probe.setUser(user);
+        }
+        if (filter.weekFilter() != null) {
+            final var mo = new MoMeasurement();
+            mo.setYear(weekFilter.year());
+            mo.setMonthNumber(weekFilter.month());
+            mo.setClosedState(weekFilter.moClosedState());
+
+            final var wk = new WkMeasurement();
+            wk.setMoMeasurement(mo);
+            wk.setClosedState(weekFilter.wkClosedState());
+            probe.setWkMeasurement(wk);
+        }
+
+        final ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withMatcher(
+                        "user.name",
+                        matcher -> matcher.ignoreCase().contains()
+                );
+
+        final Example<UserMeasurement> example = Example.of(probe, exampleMatcher);
+
+        return userMeasurementRepository.findAll(example, pageable);
     }
 
     public Page<MoMeasurement> getCascadeOfAllMeasurements(Pageable pageable) {

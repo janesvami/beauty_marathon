@@ -1,6 +1,6 @@
 package ani.beautymarathon.entity;
 
 public enum DeletedState {
-    DELETED,
-    NOT_DELETED
+    NOT_DELETED,
+    DELETED
 }
