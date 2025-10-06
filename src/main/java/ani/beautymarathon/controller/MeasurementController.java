@@ -1,5 +1,6 @@
 package ani.beautymarathon.controller;
 
+import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.MoMeasurement;
 import ani.beautymarathon.entity.User;
 import ani.beautymarathon.entity.UserMeasurement;
@@ -146,6 +147,7 @@ public class MeasurementController {
     private CascadeGetWkMeasurementView constructCascadeWkMeasurementView(WkMeasurement wkMeasurement) {
         final List<CascadeGetUserMeasurementView> userMeasurementViews = wkMeasurement.getUserMeasurements()
                 .stream()
+                .filter(um -> um.getUser().getDeletedState() == DeletedState.NOT_DELETED)
                 .map(this::constructCascadeUserMeasurementView)
                 .toList();
         return new CascadeGetWkMeasurementView(
