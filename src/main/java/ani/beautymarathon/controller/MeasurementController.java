@@ -57,13 +57,13 @@ public class MeasurementController {
         return constructUserMeasurementView(createdUserMeasurement);
     }
 
-    @GetMapping("mo/all")
+    @GetMapping("/mo/all")
     public Page<CascadeGetMoMeasurementView> getCascadeOfAllMeasurements(Pageable pageable) {
         return measurementService.getCascadeOfAllMeasurements(pageable)
                 .map(this::constructCascadeMoMeasurementView);
     }
 
-    @GetMapping("user/all")
+    @GetMapping("/user/all")
     public Page<GetUserMeasurementView> getAllMeasurements(Pageable pageable) {
         return measurementService.getAllUserMeasurements(pageable)
                 .map(this::constructUserMeasurementView);
