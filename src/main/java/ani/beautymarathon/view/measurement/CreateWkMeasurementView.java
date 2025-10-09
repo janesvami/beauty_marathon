@@ -9,6 +9,7 @@ public record CreateWkMeasurementView(
         @NotNull
         @JsonProperty("measurementDate")
         LocalDate measurementDate,
+
         @JsonProperty("commentary")
         String commentary
 ){}

@@ -16,9 +16,16 @@ import ani.beautymarathon.view.measurement.CreateWkMeasurementView;
 import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.measurement.GetUserMeasurementView;
 import ani.beautymarathon.view.measurement.GetWkMeasurementView;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,8 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
 @RestController
+@Tag(
+        name = "Measurement controllers",
+        description = "Controllers for all operations with measurements"
+)
 @RequestMapping("/measurements")
 public class MeasurementController {
 
@@ -38,33 +48,85 @@ public class MeasurementController {
         this.measurementService = measurementService;
     }
 
+
     @PostMapping("/wk/create")
-    public GetWkMeasurementView createWkMeasurement(@Valid @RequestBody CreateWkMeasurementView newWkMeasurementView) {
+    @Operation(summary = "Create a week measurement",
+            description = """
+                    This operation creates a new week measurement on corresponding date.
+                    If month measurement of the date doesn't exist, it creates it too.""",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Week measurement is created",
+                            content = @Content(schema = @Schema(implementation = GetWkMeasurementView.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public ResponseEntity<GetWkMeasurementView> createWkMeasurement(@Valid @RequestBody CreateWkMeasurementView newWkMeasurementView) {
         final WkMeasurement newWkMeasurement = new WkMeasurement();
 
         newWkMeasurement.setMeasurementDate(newWkMeasurementView.measurementDate());
         newWkMeasurement.setCommentary(newWkMeasurementView.commentary());
 
         final WkMeasurement createdWkMeasurement = measurementService.createWkMeasurement(newWkMeasurement);
-        return constructWeekMeasurementView(createdWkMeasurement);
+        final var wkMeasurementView = constructWeekMeasurementView(createdWkMeasurement);
+        return ResponseEntity.status(201).body(wkMeasurementView);
     }
 
     @PostMapping("/user/create")
-    public GetUserMeasurementView createUserMeasurement
+    @Operation(summary = "Create a user measurement",
+            description = """
+                    This operation creates a new user measurement on corresponding date.""",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "User measurement is created",
+                            content = @Content(schema = @Schema(implementation = GetUserMeasurementView.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "404", description = "User or WkMeasurement is not found",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+
+    public ResponseEntity<GetUserMeasurementView> createUserMeasurement
             (@Valid @RequestBody CreateUserMeasurementView newUserMeasurementView) {
 
         final UserMeasurement createdUserMeasurement = measurementService.createUserMeasurement(newUserMeasurementView);
-        return constructUserMeasurementView(createdUserMeasurement);
+        final var userMeasurementView = constructUserMeasurementView(createdUserMeasurement);
+        return ResponseEntity.status(201).body(userMeasurementView);
     }
 
     @GetMapping("/mo/all")
-    public Page<CascadeGetMoMeasurementView> getCascadeOfAllMeasurements(Pageable pageable) {
+    @Operation(summary = "Get in a cascade all months-weeks-measurements",
+            description = """
+                    This operation returns all measurements for all time in a cascade with pagination.
+                    The top-level element of the cascade is the month.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "All months with all measurements is received",
+                            content = @Content(schema = @Schema(implementation = CascadeGetMoMeasurementView.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public Page<CascadeGetMoMeasurementView> getCascadeOfAllMeasurements(@ParameterObject Pageable pageable) {
         return measurementService.getCascadeOfAllMeasurements(pageable)
                 .map(this::constructCascadeMoMeasurementView);
     }
 
     @GetMapping("/user/all")
-    public Page<GetUserMeasurementView> getAllMeasurements(Pageable pageable) {
+    @Operation(summary = "Get all measurements",
+            description = """
+                    This operation returns all measurements for all time with pagination.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "All measurements are received",
+                            content = @Content(schema = @Schema(implementation = GetUserMeasurementView.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public Page<GetUserMeasurementView> getAllMeasurements(@ParameterObject Pageable pageable) {
         return measurementService.getAllUserMeasurements(pageable)
                 .map(this::constructUserMeasurementView);
     }

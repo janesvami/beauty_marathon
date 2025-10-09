@@ -31,26 +31,31 @@ public record CreateUserMeasurementView(
 
         @Min(0)
         @Max(10)
+        @NotNull
         @JsonProperty("sleepPoint")
         Integer sleepPoint,
 
         @Min(0)
         @Max(10)
+        @NotNull
         @JsonProperty("waterPoint")
         Integer waterPoint,
 
         @Min(0)
         @Max(10)
+        @NotNull
         @JsonProperty("stepPoint")
         Integer stepPoint,
 
         @Min(0)
         @Max(10)
+        @NotNull
         @JsonProperty("diaryPoint")
         Integer diaryPoint,
 
         @Min(0)
         @Max(10)
+        @NotNull
         @JsonProperty("alcoholFreePoints")
         Integer alcoholFreePoints,
 

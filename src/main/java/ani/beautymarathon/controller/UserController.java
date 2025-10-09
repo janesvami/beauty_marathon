@@ -7,8 +7,12 @@ import ani.beautymarathon.view.CreateUserView;
 import ani.beautymarathon.view.GetUserView;
 import ani.beautymarathon.view.UpdateUserView;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +26,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@Tag(
+        name = "User controllers",
+        description = "Controllers for all operations with users"
+)
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
@@ -31,12 +39,17 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    @Operation(summary = "Creating a new marathon racer",
-            description = "Creating a new user and saving it in the DB with returning it to the client",
+    @Operation(summary = "Create a new marathon racer",
+            description = """
+                    This operation creates a new user and saving it in the DB with returning it to the client""",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "The user was created successfully"),
+                    @ApiResponse(responseCode = "201", description = "The user is created"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
             })
-    public GetUserView createUser(@Valid @RequestBody CreateUserView newUserView) {
+    public ResponseEntity<GetUserView> createUser(@Valid @RequestBody CreateUserView newUserView) {
         final User newUser = new User();
         newUser.setName(newUserView.name());
         newUser.setStartWeight(newUserView.startWeight());
@@ -45,10 +58,21 @@ public class UserController {
         newUser.setCreationDate(LocalDate.now());
 
         final User savedUser = userService.save(newUser);
-        return constructUserView(savedUser);
+        final var userView = constructUserView(savedUser);
+        return ResponseEntity.status(201).body(userView);
     }
 
     @GetMapping("/all")
+    @Operation(summary = "Get profiles of all users",
+            description = """
+                    This operation returns a list of profiles of all registered users.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User profiles are received"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
     public List<GetUserView> findAll() {
         final List<User> users = userService.findAll();
         return users.stream()
@@ -57,18 +81,51 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get user profile by ID",
+            description = """
+                    This operation returns the user profile according to the given id""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User profile is received"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "404", description = "User is not found",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
     public GetUserView getById(@PathVariable long id) {
         final User user = userService.getById(id);
         return constructUserView(user);
     }
 
     @PutMapping("/status/{id}")
+    @Operation(summary = "Get user status by ID",
+            description = """
+                    This operation returns the user status according to the given id: deleted or not deleted.
+                    The deleted status means that the user is not currently participating in the project, but can be returned.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User profiles are received"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
     public GetUserView updateUserStatus(@PathVariable Long id, @RequestParam("newState") DeletedState newState) {
         final User updatedUser = userService.updateStatus(id, newState);
         return constructUserView(updatedUser);
     }
 
     @PutMapping("/update/{id}")
+    @Operation(summary = "Update user profile",
+            description = """
+                    This operation is for making changes to user profile data, except for changing the status.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User profile is updated"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
     public GetUserView updateUserView(@PathVariable Long id, @RequestBody UpdateUserView userView) {
         final User updatedUser = userService.update(id, userView);
         return constructUserView(updatedUser);
