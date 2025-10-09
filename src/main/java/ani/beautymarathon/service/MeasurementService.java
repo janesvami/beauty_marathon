@@ -122,7 +122,7 @@ public class MeasurementService {
         final var filterWeek = filter.week();
 
         if (filterUser != null) {
-            var user = new User();
+            final var user = new User();
             user.setName(filterUser.name());
             user.setDeletedState(filterUser.deletedState());
             probe.setUser(user);
