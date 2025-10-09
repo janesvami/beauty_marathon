@@ -6,6 +6,7 @@ import ani.beautymarathon.entity.User;
 import ani.beautymarathon.entity.UserMeasurement;
 import ani.beautymarathon.entity.WkMeasurement;
 import ani.beautymarathon.service.MeasurementService;
+import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import ani.beautymarathon.view.CascadeGetUserView;
 import ani.beautymarathon.view.GetUserView;
 import ani.beautymarathon.view.measurement.CascadeGetMoMeasurementView;
@@ -114,7 +115,7 @@ public class MeasurementController {
                 .map(this::constructCascadeMoMeasurementView);
     }
 
-    @GetMapping("/user/all")
+    @PostMapping("/user/all")
     @Operation(summary = "Get all measurements",
             description = """
                     This operation returns all measurements for all time with pagination.""",
@@ -126,8 +127,11 @@ public class MeasurementController {
                     @ApiResponse(responseCode = "500", description = "Server error",
                             content = @Content(schema = @Schema()))
             })
-    public Page<GetUserMeasurementView> getAllMeasurements(@ParameterObject Pageable pageable) {
-        return measurementService.getAllUserMeasurements(pageable)
+    public Page<GetUserMeasurementView> getAllMeasurements(
+            @Valid @RequestBody UserMeasurementFilter filter,
+            @ParameterObject Pageable pageable
+    ) {
+        return measurementService.getAllUserMeasurements(filter, pageable)
                 .map(this::constructUserMeasurementView);
     }
 
