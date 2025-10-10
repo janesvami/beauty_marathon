@@ -101,10 +101,10 @@ public class UserController {
     @PutMapping("/status/{id}")
     @Operation(summary = "Update user status by ID",
             description = """
-                     This operation updates the user status for the given ID to either deleted or not_deleted.
-                    The deleted status means that the user is not currently participating in the project, but can be restored.""",
+                     This operation updates the user status for the given ID to either "DELETED" or "NOT_DELETED".
+                    The status "DELETED" means that the user is not currently participating in the project, but can be restored.""",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "User profiles are received"),
+                    @ApiResponse(responseCode = "200", description = "User status is updated"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",
                             content = @Content(schema = @Schema())),
                     @ApiResponse(responseCode = "500", description = "Server error",
