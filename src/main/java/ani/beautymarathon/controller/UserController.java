@@ -41,7 +41,7 @@ public class UserController {
     @PostMapping("/create")
     @Operation(summary = "Create a new marathon racer",
             description = """
-                    This operation creates a new user and saving it in the DB with returning it to the client""",
+                    This operation creates a new user and saves it in the database.""",
             responses = {
                     @ApiResponse(responseCode = "201", description = "The user is created"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",
@@ -83,7 +83,7 @@ public class UserController {
     @GetMapping("/{id}")
     @Operation(summary = "Get user profile by ID",
             description = """
-                    This operation returns the user profile according to the given id""",
+                    This operation returns the user profile for the given ID.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "User profile is received"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",
@@ -99,10 +99,10 @@ public class UserController {
     }
 
     @PutMapping("/status/{id}")
-    @Operation(summary = "Get user status by ID",
+    @Operation(summary = "Update user status by ID",
             description = """
-                    This operation returns the user status according to the given id: deleted or not deleted.
-                    The deleted status means that the user is not currently participating in the project, but can be returned.""",
+                     This operation updates the user status for the given ID to either deleted or not_deleted.
+                    The deleted status means that the user is not currently participating in the project, but can be restored.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "User profiles are received"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",
@@ -118,7 +118,7 @@ public class UserController {
     @PutMapping("/update/{id}")
     @Operation(summary = "Update user profile",
             description = """
-                    This operation is for making changes to user profile data, except for changing the status.""",
+                    This operation updates user profile data, excluding status changes.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "User profile is updated"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",

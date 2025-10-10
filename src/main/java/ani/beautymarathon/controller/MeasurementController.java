@@ -6,7 +6,6 @@ import ani.beautymarathon.entity.User;
 import ani.beautymarathon.entity.UserMeasurement;
 import ani.beautymarathon.entity.WkMeasurement;
 import ani.beautymarathon.service.MeasurementService;
-import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import ani.beautymarathon.view.CascadeGetUserView;
 import ani.beautymarathon.view.GetUserView;
 import ani.beautymarathon.view.measurement.CascadeGetMoMeasurementView;
@@ -17,6 +16,7 @@ import ani.beautymarathon.view.measurement.CreateWkMeasurementView;
 import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.measurement.GetUserMeasurementView;
 import ani.beautymarathon.view.measurement.GetWkMeasurementView;
+import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -53,8 +53,8 @@ public class MeasurementController {
     @PostMapping("/wk/create")
     @Operation(summary = "Create a week measurement",
             description = """
-                    This operation creates a new week measurement on corresponding date.
-                    If month measurement of the date doesn't exist, it creates it too.""",
+                    This operation creates a new week_measurement for the corresponding date.
+                    If the month_measurement for that date doesn't exist, it creates one as well.""",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Week measurement is created",
                             content = @Content(schema = @Schema(implementation = GetWkMeasurementView.class))),
@@ -77,7 +77,7 @@ public class MeasurementController {
     @PostMapping("/user/create")
     @Operation(summary = "Create a user measurement",
             description = """
-                    This operation creates a new user measurement on corresponding date.""",
+                    This operation creates a new user measurement for the corresponding date.""",
             responses = {
                     @ApiResponse(responseCode = "201", description = "User measurement is created",
                             content = @Content(schema = @Schema(implementation = GetUserMeasurementView.class))),
@@ -98,12 +98,12 @@ public class MeasurementController {
     }
 
     @GetMapping("/mo/all")
-    @Operation(summary = "Get in a cascade all months-weeks-measurements",
+    @Operation(summary = "Get all months, weeks, and measurements in a cascade",
             description = """
-                    This operation returns all measurements for all time in a cascade with pagination.
-                    The top-level element of the cascade is the month.""",
+                    This operation returns all measurements in a cascading structure with pagination.
+                    The top-level element in the cascade is the month.""",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "All months with all measurements is received",
+                    @ApiResponse(responseCode = "200", description = "All months with all measurements are received",
                             content = @Content(schema = @Schema(implementation = CascadeGetMoMeasurementView.class))),
                     @ApiResponse(responseCode = "400", description = "Invalid input",
                             content = @Content(schema = @Schema())),
@@ -118,7 +118,7 @@ public class MeasurementController {
     @PostMapping("/user/all")
     @Operation(summary = "Get all measurements",
             description = """
-                    This operation returns all measurements for all time with pagination.""",
+                    This operation returns all measurements with pagination and filtering.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "All measurements are received",
                             content = @Content(schema = @Schema(implementation = GetUserMeasurementView.class))),
