@@ -16,6 +16,7 @@ import ani.beautymarathon.view.measurement.CreateWkMeasurementView;
 import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.measurement.GetUserMeasurementView;
 import ani.beautymarathon.view.measurement.GetWkMeasurementView;
+import ani.beautymarathon.view.measurement.filter.register.MoMeasurementFilter;
 import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,7 +28,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,7 +63,9 @@ public class MeasurementController {
                     @ApiResponse(responseCode = "500", description = "Server error",
                             content = @Content(schema = @Schema()))
             })
-    public ResponseEntity<GetWkMeasurementView> createWkMeasurement(@Valid @RequestBody CreateWkMeasurementView newWkMeasurementView) {
+    public ResponseEntity<GetWkMeasurementView> createWkMeasurement(
+            @Valid @RequestBody CreateWkMeasurementView newWkMeasurementView
+    ) {
         final WkMeasurement newWkMeasurement = new WkMeasurement();
 
         newWkMeasurement.setMeasurementDate(newWkMeasurementView.measurementDate());
@@ -97,10 +99,10 @@ public class MeasurementController {
         return ResponseEntity.status(201).body(userMeasurementView);
     }
 
-    @GetMapping("/mo/all")
+    @PostMapping("/mo/all")
     @Operation(summary = "Get all months, weeks, and measurements in a cascade",
             description = """
-                    This operation returns all measurements in a cascading structure with pagination.
+                    This operation returns all measurements in a cascading structure with pagination and filtering.
                     The top-level element in the cascade is the month.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "All months with all measurements are received",
@@ -110,8 +112,11 @@ public class MeasurementController {
                     @ApiResponse(responseCode = "500", description = "Server error",
                             content = @Content(schema = @Schema()))
             })
-    public Page<CascadeGetMoMeasurementView> getCascadeOfAllMeasurements(@ParameterObject Pageable pageable) {
-        return measurementService.getCascadeOfAllMeasurements(pageable)
+    public Page<CascadeGetMoMeasurementView> getCascadeOfAllMeasurements(
+            @Valid @RequestBody MoMeasurementFilter filter,
+            @ParameterObject Pageable pageable
+    ) {
+        return measurementService.getCascadeOfAllMeasurements(filter, pageable)
                 .map(this::constructCascadeMoMeasurementView);
     }
 

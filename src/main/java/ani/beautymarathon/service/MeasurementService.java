@@ -14,6 +14,7 @@ import ani.beautymarathon.repository.UserMeasurementRepository;
 import ani.beautymarathon.repository.UserRepository;
 import ani.beautymarathon.repository.WkMeasurementRepository;
 import ani.beautymarathon.view.measurement.CreateUserMeasurementView;
+import ani.beautymarathon.view.measurement.filter.register.MoMeasurementFilter;
 import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -116,6 +117,14 @@ public class MeasurementService {
         }
     }
 
+    public Page<MoMeasurement> getCascadeOfAllMeasurements(MoMeasurementFilter filter, Pageable pageable) {
+        if (filter != null) {
+            return searchMoMeasurementsByQbe(filter, pageable);
+        } else {
+            return moMeasurementRepository.findAll(pageable);
+        }
+    }
+
     private Page<UserMeasurement> searchUserMeasurementsByQbe(UserMeasurementFilter filter, Pageable pageable) {
         final var probe = new UserMeasurement();
         final var filterUser = filter.user();
@@ -151,8 +160,18 @@ public class MeasurementService {
         return userMeasurementRepository.findAll(example, pageable);
     }
 
-    public Page<MoMeasurement> getCascadeOfAllMeasurements(Pageable pageable) {
-        return moMeasurementRepository.findAll(pageable);
+    private Page<MoMeasurement> searchMoMeasurementsByQbe(MoMeasurementFilter filter, Pageable pageable) {
+
+        final var probe = new MoMeasurement();
+        probe.setYear(filter.year());
+        probe.setMonthNumber(filter.monthNumber());
+        probe.setClosedState(filter.closedState());
+
+        final ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withIgnoreNullValues();
+        final Example<MoMeasurement> example = Example.of(probe, exampleMatcher);
+
+        return moMeasurementRepository.findAll(example, pageable);
     }
 
     private UserMeasurement save(UserMeasurement userMeasurement) {
