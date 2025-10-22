@@ -35,9 +35,9 @@ public class WkMeasurement {
     @Column(name = "closed_state")
     private ClosedState closedState = ClosedState.OPEN;
 
+
     @Column(name = "commentary")
     private String commentary;
-
     @ManyToOne
     @JoinColumn(name = "mo_measurement_id")
     private MoMeasurement moMeasurement;

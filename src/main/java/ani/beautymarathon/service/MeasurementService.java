@@ -12,7 +12,9 @@ import ani.beautymarathon.exception.WkMeasurementClosedException;
 import ani.beautymarathon.repository.MoMeasurementRepository;
 import ani.beautymarathon.repository.UserMeasurementRepository;
 import ani.beautymarathon.repository.UserRepository;
+import ani.beautymarathon.repository.WinnerRepository;
 import ani.beautymarathon.repository.WkMeasurementRepository;
+import ani.beautymarathon.view.UserMaxAverageView;
 import ani.beautymarathon.view.measurement.CreateUserMeasurementView;
 import ani.beautymarathon.view.measurement.filter.register.MoMeasurementFilter;
 import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
@@ -26,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -35,14 +38,19 @@ public class MeasurementService {
     private final WkMeasurementRepository wkMeasurementRepository;
     private final UserMeasurementRepository userMeasurementRepository;
     private final UserRepository userRepository;
+    private final WinnerRepository winnerRepository;
+    private final WinnerService winnerService;
 
     public MeasurementService(MoMeasurementRepository moMeasurementRepository,
                               WkMeasurementRepository wkMeasurementRepository,
-                              UserMeasurementRepository userMeasurementRepository, UserRepository userRepository) {
+                              UserMeasurementRepository userMeasurementRepository, UserRepository userRepository,
+                              WinnerRepository winnerRepository, WinnerService winnerService) {
         this.moMeasurementRepository = moMeasurementRepository;
         this.wkMeasurementRepository = wkMeasurementRepository;
         this.userMeasurementRepository = userMeasurementRepository;
         this.userRepository = userRepository;
+        this.winnerRepository = winnerRepository;
+        this.winnerService = winnerService;
     }
 
     @Transactional
@@ -123,6 +131,43 @@ public class MeasurementService {
         } else {
             return moMeasurementRepository.findAll(pageable);
         }
+    }
+
+    public WkMeasurement getWkById(long id) {
+        return wkMeasurementRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("WkMeasurement with id " + id + " not found"));
+    }
+
+    public WkMeasurement updateWkStatus(long id, ClosedState closedState) {
+        final WkMeasurement wkMeasurement = getWkById(id);
+        wkMeasurement.setClosedState(closedState);
+
+        final WkMeasurement updated = wkMeasurementRepository.save(wkMeasurement);
+        log.info("Status of week with id {} has been updated {}", id, updated);
+        return updated;
+    }
+
+    public MoMeasurement getMoById(long id) {
+        return moMeasurementRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("MoMeasurement with id " + id + " not found"));
+    }
+
+    @Transactional
+    public MoMeasurement updateMoStatus(long moId, ClosedState closedState) {
+        final MoMeasurement moMeasurement = getMoById(moId);
+        moMeasurement.setClosedState(closedState);
+        final MoMeasurement updatedMoMeasurement = moMeasurementRepository.save(moMeasurement);
+        log.info("Status of month with id {} has been updated {}", moId, updatedMoMeasurement);
+
+        if (closedState == ClosedState.OPEN) {
+            return updatedMoMeasurement;
+        }
+
+        List<UserMaxAverageView> userMaxAverageViews = winnerRepository.findUsersWithMaxAverage(moId);
+        winnerService.createWinnersFromViews(userMaxAverageViews, moMeasurement);
+        log.info("The winner of the month has been determined!");
+
+        return updatedMoMeasurement;
     }
 
     private Page<UserMeasurement> searchUserMeasurementsByQbe(UserMeasurementFilter filter, Pageable pageable) {
