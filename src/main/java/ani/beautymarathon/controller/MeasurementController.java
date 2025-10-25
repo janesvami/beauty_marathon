@@ -165,7 +165,7 @@ public class MeasurementController {
     @Operation(summary = "Update month status by ID",
             description = """
                      This operation updates the status of the month for the given ID to either "OPEN" or "CLOSED".
-                    A "CLOSED" week is read-only.""",
+                    A "CLOSED" month is read-only.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "MoMeasurement status is updated"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",

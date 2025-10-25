@@ -153,21 +153,28 @@ public class MeasurementService {
     }
 
     @Transactional
-    public MoMeasurement updateMoStatus(long moId, ClosedState closedState) {
+    public MoMeasurement updateMoStatus(long moId, ClosedState newMoState) {
         final MoMeasurement moMeasurement = getMoById(moId);
-        moMeasurement.setClosedState(closedState);
-        final MoMeasurement updatedMoMeasurement = moMeasurementRepository.save(moMeasurement);
-        log.info("Status of month with id {} has been updated {}", moId, updatedMoMeasurement);
+        final ClosedState currentMoState = moMeasurement.getClosedState();
 
-        if (closedState == ClosedState.OPEN) {
+        if (currentMoState == newMoState) {
+            return moMeasurement;
+        } else {
+            moMeasurement.setClosedState(newMoState);
+            final MoMeasurement updatedMoMeasurement = moMeasurementRepository.save(moMeasurement);
+            log.info("Status of month with id {} has been updated {}", moId, updatedMoMeasurement);
+
+            if (ClosedState.CLOSED == newMoState) {
+
+                List<UserMaxAverageView> userMaxAverageViews = winnerRepository.findUsersWithMaxAverage(moId);
+                winnerService.createWinnersFromViews(userMaxAverageViews, moMeasurement);
+                log.info("The winner of the month has been determined!");
+
+                return updatedMoMeasurement;
+            }
             return updatedMoMeasurement;
+
         }
-
-        List<UserMaxAverageView> userMaxAverageViews = winnerRepository.findUsersWithMaxAverage(moId);
-        winnerService.createWinnersFromViews(userMaxAverageViews, moMeasurement);
-        log.info("The winner of the month has been determined!");
-
-        return updatedMoMeasurement;
     }
 
     private Page<UserMeasurement> searchUserMeasurementsByQbe(UserMeasurementFilter filter, Pageable pageable) {
