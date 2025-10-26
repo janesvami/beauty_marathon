@@ -26,9 +26,9 @@ public class WinnerService {
         for (UserMaxAverageView userMax : userMaxAverageViews) {
             final Winner winner = new Winner();
             winner.setAveragePoint(userMax.getMaxAverageTotal());
-            Long userId = userMax.getUserId();
-            User byId = userService.getById(userId);
-            winner.setUser(byId);
+            final Long userMaxId = userMax.getUserId();
+            final User winnerUserId = userService.getById(userMaxId);
+            winner.setUser(winnerUserId);
             winner.setMoMeasurement(moMeasurement);
 
             winners.add(winner);
