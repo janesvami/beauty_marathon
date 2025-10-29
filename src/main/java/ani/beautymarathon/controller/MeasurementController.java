@@ -17,6 +17,7 @@ import ani.beautymarathon.view.measurement.CreateWkMeasurementView;
 import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.measurement.GetUserMeasurementView;
 import ani.beautymarathon.view.measurement.GetWkMeasurementView;
+import ani.beautymarathon.view.measurement.UpdateUserMeasurementView;
 import ani.beautymarathon.view.measurement.filter.register.MoMeasurementFilter;
 import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -176,6 +177,24 @@ public class MeasurementController {
     public GetMoMeasurementView updateMoStatus(@PathVariable Long moId, @RequestParam("newState") ClosedState newState) {
         final MoMeasurement updated = measurementService.updateMoStatus(moId, newState);
         return constructMoMeasurementView(updated);
+    }
+
+    @PutMapping("/user/update/{id}")
+    @Operation(summary = "Update user measurement by ID",
+            description = """
+                     This operation updates a measurement for the given ID.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "UserMeasurement is updated"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public GetUserMeasurementView updateUserMeasurementView(
+            @PathVariable Long id, @RequestBody UpdateUserMeasurementView userMeasurementView
+    ) {
+        final UserMeasurement updatedUser = measurementService.updateMeasurement(id, userMeasurementView);
+        return constructUserMeasurementView(updatedUser);
     }
 
     private GetMoMeasurementView constructMoMeasurementView(MoMeasurement moMeasurement) {

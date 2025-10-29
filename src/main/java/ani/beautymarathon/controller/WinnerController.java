@@ -18,6 +18,4 @@ public class WinnerController {
     public WinnerController(WinnerService winnerService) {
         this.winnerService = winnerService;
     }
-
-
 }

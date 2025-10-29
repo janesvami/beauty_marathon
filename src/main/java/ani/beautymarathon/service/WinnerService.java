@@ -33,7 +33,6 @@ public class WinnerService {
 
             winners.add(winner);
         }
-
         winnerRepository.saveAll(winners);
     }
 }

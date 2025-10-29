@@ -16,6 +16,7 @@ import ani.beautymarathon.repository.WinnerRepository;
 import ani.beautymarathon.repository.WkMeasurementRepository;
 import ani.beautymarathon.view.UserMaxAverageView;
 import ani.beautymarathon.view.measurement.CreateUserMeasurementView;
+import ani.beautymarathon.view.measurement.UpdateUserMeasurementView;
 import ani.beautymarathon.view.measurement.filter.register.MoMeasurementFilter;
 import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import jakarta.persistence.EntityNotFoundException;
@@ -176,6 +177,38 @@ public class MeasurementService {
 
         }
     }
+
+    public UserMeasurement getMeasurementById(long id) {
+        return userMeasurementRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User measurement with id " + id + " not found"));
+    }
+
+    public UserMeasurement updateMeasurement(
+            long id, UpdateUserMeasurementView userMeasurementView
+    ) {
+
+        final UserMeasurement userMeasurement = getMeasurementById(id);
+        final WkMeasurement wkMeasurement = userMeasurement.getWkMeasurement();
+
+        if(ClosedState.CLOSED.equals(wkMeasurement.getClosedState())) {
+            throw new WkMeasurementClosedException(
+                    "The week is closed. Please open the week for updating the measurement.");
+        }
+
+        userMeasurement.setWeight(userMeasurementView.weight());
+        userMeasurement.setWaterPoint(userMeasurementView.waterPoint());
+        userMeasurement.setCommentary(userMeasurementView.commentary());
+        userMeasurement.setDiaryPoint(userMeasurementView.diaryPoint());
+        userMeasurement.setAlcoholFreePoint(userMeasurementView.alcoholFreePoints());
+        userMeasurement.setSleepPoint(userMeasurementView.sleepPoint());
+        userMeasurement.setStepPoint(userMeasurementView.stepPoint());
+        userMeasurement.setWaterPoint(userMeasurementView.waterPoint());
+
+        final UserMeasurement updatedUserMeasurement = userMeasurementRepository.save(userMeasurement);
+        log.info("User with id {} has been updated {}", id, updatedUserMeasurement);
+        return updatedUserMeasurement;
+    }
+
 
     private Page<UserMeasurement> searchUserMeasurementsByQbe(UserMeasurementFilter filter, Pageable pageable) {
         final var probe = new UserMeasurement();
