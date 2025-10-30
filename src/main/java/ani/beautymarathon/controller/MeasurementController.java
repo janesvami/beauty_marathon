@@ -247,7 +247,8 @@ public class MeasurementController {
                 user.getStartWeight(),
                 user.getTargetWeight(),
                 user.getCreationDate(),
-                user.getDeletedState()
+                user.getDeletedState(),
+                user.getEmail()
         );
         return new GetUserMeasurementView(
                 userMeasurement.getId(),

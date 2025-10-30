@@ -2,6 +2,7 @@ package ani.beautymarathon.service;
 
 import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.User;
+import ani.beautymarathon.exception.EmailAlreadyExistsException;
 import ani.beautymarathon.exception.UserDeletedException;
 import ani.beautymarathon.repository.UserRepository;
 import ani.beautymarathon.view.UpdateUserView;
@@ -21,9 +22,13 @@ public class UserService {
     }
 
     public User save(User newUser) {
-        User user = userRepository.save(newUser);
-        log.info("User saved: {} ", user);
-        return user;
+        try {
+            User user = userRepository.save(newUser);
+            log.info("User saved: {} ", user);
+            return user;
+        } catch (RuntimeException e) {
+            throw new EmailAlreadyExistsException("This email is already exists. Please enter another email.");
+        }
     }
 
     public List<User> findAll() {
@@ -45,6 +50,7 @@ public class UserService {
         user.setName(userView.name());
         user.setStartWeight(userView.startWeight());
         user.setTargetWeight(userView.targetWeight());
+        user.setEmail(userView.email());
 
         final User updatedUser = userRepository.save(user);
         log.info("User with id {} has been updated {}", id, updatedUser);
