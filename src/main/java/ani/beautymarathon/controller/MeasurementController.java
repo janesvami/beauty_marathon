@@ -1,5 +1,6 @@
 package ani.beautymarathon.controller;
 
+import ani.beautymarathon.entity.ClosedState;
 import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.MoMeasurement;
 import ani.beautymarathon.entity.User;
@@ -16,6 +17,7 @@ import ani.beautymarathon.view.measurement.CreateWkMeasurementView;
 import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.measurement.GetUserMeasurementView;
 import ani.beautymarathon.view.measurement.GetWkMeasurementView;
+import ani.beautymarathon.view.measurement.UpdateUserMeasurementView;
 import ani.beautymarathon.view.measurement.filter.register.MoMeasurementFilter;
 import ani.beautymarathon.view.measurement.filter.register.UserMeasurementFilter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,9 +30,12 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -138,6 +143,67 @@ public class MeasurementController {
     ) {
         return measurementService.getAllUserMeasurements(filter, pageable)
                 .map(this::constructUserMeasurementView);
+    }
+
+    @PutMapping("/wk/status/{id}")
+    @Operation(summary = "Update week status by ID",
+            description = """
+                     This operation updates the status of the week for the given ID to either "OPEN" or "CLOSED".
+                    A "CLOSED" week is read-only.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "WkMeasurement status is updated"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public GetWkMeasurementView updateWkStatus(@PathVariable Long id, @RequestParam("newState") ClosedState newState) {
+        final WkMeasurement updated = measurementService.updateWkStatus(id, newState);
+        return constructWeekMeasurementView(updated);
+    }
+
+    @PutMapping("/mo/status/{moId}")
+    @Operation(summary = "Update month status by ID",
+            description = """
+                     This operation updates the status of the month for the given ID to either "OPEN" or "CLOSED".
+                    A "CLOSED" month is read-only.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "MoMeasurement status is updated"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public GetMoMeasurementView updateMoStatus(@PathVariable Long moId, @RequestParam("newState") ClosedState newState) {
+        final MoMeasurement updated = measurementService.updateMoStatus(moId, newState);
+        return constructMoMeasurementView(updated);
+    }
+
+    @PutMapping("/user/update/{id}")
+    @Operation(summary = "Update user measurement by ID",
+            description = """
+                     This operation updates a measurement for the given ID.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "UserMeasurement is updated"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public GetUserMeasurementView updateUserMeasurementView(
+            @PathVariable Long id, @RequestBody UpdateUserMeasurementView userMeasurementView
+    ) {
+        final UserMeasurement updatedUser = measurementService.updateMeasurement(id, userMeasurementView);
+        return constructUserMeasurementView(updatedUser);
+    }
+
+    private GetMoMeasurementView constructMoMeasurementView(MoMeasurement moMeasurement) {
+        return new GetMoMeasurementView(
+                moMeasurement.getId(),
+                moMeasurement.getClosedState(),
+                moMeasurement.getYear(),
+                moMeasurement.getMonthNumber()
+        );
     }
 
     private GetWkMeasurementView constructWeekMeasurementView(WkMeasurement wkMeasurement) {
