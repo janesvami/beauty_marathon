@@ -24,9 +24,9 @@ public class UserService {
     }
 
     @Transactional
-    public User save(User newUser) {
+    public User create(User newUser) {
         try {
-            User user = userRepository.save(newUser);
+            final User user = userRepository.saveAndFlush(newUser);
             log.info("User saved: {} ", user);
             return user;
         } catch (DataIntegrityViolationException ex) {
@@ -55,9 +55,13 @@ public class UserService {
         user.setTargetWeight(userView.targetWeight());
         user.setEmail(userView.email());
 
-        final User updatedUser = userRepository.save(user);
-        log.info("User with id {} has been updated {}", id, updatedUser);
-        return updatedUser;
+        try {
+            final User updatedUser = userRepository.saveAndFlush(user);
+            log.info("User with id {} has been updated {}", id, updatedUser);
+            return updatedUser;
+        } catch (DataIntegrityViolationException ex) {
+            throw new EmailAlreadyExistsException("The email is already exists");
+        }
     }
 
     public User updateStatus(long id, DeletedState deletedState) {

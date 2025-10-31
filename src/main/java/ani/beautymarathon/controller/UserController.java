@@ -58,7 +58,7 @@ public class UserController {
         newUser.setCreationDate(LocalDate.now());
         newUser.setEmail(newUserView.email());
 
-        final User savedUser = userService.save(newUser);
+        final User savedUser = userService.create(newUser);
         final var userView = constructUserView(savedUser);
         return ResponseEntity.status(201).body(userView);
     }

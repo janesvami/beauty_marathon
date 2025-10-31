@@ -144,7 +144,7 @@ public class MeasurementService {
         wkMeasurement.setClosedState(closedState);
 
         final WkMeasurement updatedWkMeasurement = wkMeasurementRepository.save(wkMeasurement);
-        log.info("Status of week with id {} has been updated {}", id, updatedWkMeasurement);
+        log.info("Status of week with id {} has been updated to {}", id, updatedWkMeasurement.getClosedState());
         return updatedWkMeasurement;
     }
 
@@ -163,7 +163,7 @@ public class MeasurementService {
         } else {
             moMeasurement.setClosedState(newMoState);
             final MoMeasurement updatedMoMeasurement = moMeasurementRepository.save(moMeasurement);
-            log.info("Status of month with id {} has been updated {}", moId, updatedMoMeasurement);
+            log.info("Status of month with id {} has been updated to {}", moId, updatedMoMeasurement.getClosedState());
 
             if (ClosedState.CLOSED == newMoState) {
 
