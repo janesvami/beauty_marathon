@@ -143,9 +143,9 @@ public class MeasurementService {
         final WkMeasurement wkMeasurement = getWkById(id);
         wkMeasurement.setClosedState(closedState);
 
-        final WkMeasurement updated = wkMeasurementRepository.save(wkMeasurement);
-        log.info("Status of week with id {} has been updated {}", id, updated);
-        return updated;
+        final WkMeasurement updatedWkMeasurement = wkMeasurementRepository.save(wkMeasurement);
+        log.info("Status of week with id {} has been updated {}", id, updatedWkMeasurement);
+        return updatedWkMeasurement;
     }
 
     public MoMeasurement getMoById(long id) {
