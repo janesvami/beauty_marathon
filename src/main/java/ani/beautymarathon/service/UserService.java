@@ -8,7 +8,9 @@ import ani.beautymarathon.repository.UserRepository;
 import ani.beautymarathon.view.UpdateUserView;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,13 +23,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public User save(User newUser) {
         try {
             User user = userRepository.save(newUser);
             log.info("User saved: {} ", user);
             return user;
-        } catch (RuntimeException e) {
-            throw new EmailAlreadyExistsException("This email is already exists. Please enter another email.");
+        } catch (DataIntegrityViolationException ex) {
+            throw new EmailAlreadyExistsException("The email is already exists");
         }
     }
 
