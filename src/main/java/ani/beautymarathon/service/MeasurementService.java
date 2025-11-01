@@ -166,15 +166,11 @@ public class MeasurementService {
             log.info("Status of month with id {} has been updated to {}", moId, updatedMoMeasurement.getClosedState());
 
             if (ClosedState.CLOSED == newMoState) {
-
                 List<UserMaxAverageView> userMaxAverageViews = winnerRepository.findUsersWithMaxAverage(moId);
                 winnerService.createWinnersFromViews(userMaxAverageViews, moMeasurement);
                 log.info("The winner of the month has been determined!");
-
-                return updatedMoMeasurement;
             }
             return updatedMoMeasurement;
-
         }
     }
 
@@ -192,7 +188,7 @@ public class MeasurementService {
 
         if(ClosedState.CLOSED.equals(wkMeasurement.getClosedState())) {
             throw new WkMeasurementClosedException(
-                    "The week is closed. Please open the week for updating the measurement.");
+                    "The week is closed.");
         }
 
         userMeasurement.setWeight(userMeasurementView.weight());
