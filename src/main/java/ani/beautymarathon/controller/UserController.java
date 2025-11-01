@@ -56,8 +56,9 @@ public class UserController {
         newUser.setTargetWeight(newUserView.targetWeight());
         newUser.setDeletedState(DeletedState.NOT_DELETED);
         newUser.setCreationDate(LocalDate.now());
+        newUser.setEmail(newUserView.email());
 
-        final User savedUser = userService.save(newUser);
+        final User savedUser = userService.create(newUser);
         final var userView = constructUserView(savedUser);
         return ResponseEntity.status(201).body(userView);
     }
@@ -138,7 +139,8 @@ public class UserController {
                 user.getStartWeight(),
                 user.getTargetWeight(),
                 user.getCreationDate(),
-                user.getDeletedState()
+                user.getDeletedState(),
+                user.getEmail()
         );
     }
 }

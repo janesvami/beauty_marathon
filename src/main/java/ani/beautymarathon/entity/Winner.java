@@ -47,7 +47,7 @@ public class Winner {
     public String toString() {
         return "Winner of " + moMeasurement.getMonthNumber() +
                 ", " + moMeasurement.getYear() +
-                ": user " + user + ", " + user.getName() +
+                ": user " + user.getName() +
                 "with averagePoint: " + averagePoint;
     }
 }

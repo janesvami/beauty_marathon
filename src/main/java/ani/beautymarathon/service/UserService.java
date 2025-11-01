@@ -2,12 +2,15 @@ package ani.beautymarathon.service;
 
 import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.User;
+import ani.beautymarathon.exception.EmailAlreadyExistsException;
 import ani.beautymarathon.exception.UserDeletedException;
 import ani.beautymarathon.repository.UserRepository;
 import ani.beautymarathon.view.UpdateUserView;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,10 +23,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User save(User newUser) {
-        User user = userRepository.save(newUser);
-        log.info("User saved: {} ", user);
-        return user;
+    @Transactional
+    public User create(User newUser) {
+        try {
+            final User user = userRepository.saveAndFlush(newUser);
+            log.info("User saved: {} ", user);
+            return user;
+        } catch (DataIntegrityViolationException ex) {
+            throw new EmailAlreadyExistsException("The email is already exists");
+        }
     }
 
     public List<User> findAll() {
@@ -45,10 +53,15 @@ public class UserService {
         user.setName(userView.name());
         user.setStartWeight(userView.startWeight());
         user.setTargetWeight(userView.targetWeight());
+        user.setEmail(userView.email());
 
-        final User updatedUser = userRepository.save(user);
-        log.info("User with id {} has been updated {}", id, updatedUser);
-        return updatedUser;
+        try {
+            final User updatedUser = userRepository.saveAndFlush(user);
+            log.info("User with id {} has been updated {}", id, updatedUser);
+            return updatedUser;
+        } catch (DataIntegrityViolationException ex) {
+            throw new EmailAlreadyExistsException("The email is already exists");
+        }
     }
 
     public User updateStatus(long id, DeletedState deletedState) {

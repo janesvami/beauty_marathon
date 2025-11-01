@@ -1,6 +1,7 @@
 package ani.beautymarathon.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,67 +12,85 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFoundEntity(EntityNotFoundException ex) {
-        HttpStatus notFound = HttpStatus.NOT_FOUND;
-        ApiError apiError = new ApiError(
+        final HttpStatus notFound = HttpStatus.NOT_FOUND;
+        final ApiError apiError = new ApiError(
                 notFound,
                 ex.getMessage()
         );
+        log.error("Error: ", ex);
         return constructApiErrorWithHttpStatus(apiError);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex) {
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-        ApiError apiError = new ApiError(
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ApiError apiError = new ApiError(
                 badRequest,
                 ex.getMessage()
         );
+        log.error("Error: ", ex);
         return constructApiErrorWithHttpStatus(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        var errs = ex.getBindingResult()
+        final var errs = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(fieldError -> "Field " + fieldError.getField() + " " + fieldError.getDefaultMessage())
                 .collect(Collectors.toSet());
 
         final var apiError = new ApiError(HttpStatus.BAD_REQUEST, "Request validation failed: " + errs);
+        log.error("Error: ", ex);
         return constructApiErrorWithHttpStatus(apiError);
     }
 
     @ExceptionHandler(MoClosedException.class)
     public ResponseEntity<ApiError> handleMoClosed(MoClosedException ex) {
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-        ApiError apiError = new ApiError(
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ApiError apiError = new ApiError(
                 badRequest,
                 ex.getMessage()
         );
+        log.error("Error: ", ex);
         return constructApiErrorWithHttpStatus(apiError);
     }
 
     @ExceptionHandler(WkMeasurementClosedException.class)
     public ResponseEntity<ApiError> handleWkMeasurementClosed(WkMeasurementClosedException ex) {
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-        ApiError apiError = new ApiError(
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ApiError apiError = new ApiError(
                 badRequest,
                 ex.getMessage()
         );
+        log.error("Error: ", ex);
         return constructApiErrorWithHttpStatus(apiError);
     }
 
     @ExceptionHandler(UserDeletedException.class)
     public ResponseEntity<ApiError> handleUserDeleted(UserDeletedException ex) {
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-        ApiError apiError = new ApiError(
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ApiError apiError = new ApiError(
                 badRequest,
                 ex.getMessage()
         );
+        log.error("Error: ", ex);
+        return constructApiErrorWithHttpStatus(apiError);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleEmailExists(EmailAlreadyExistsException ex) {
+        final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        final ApiError apiError = new ApiError(
+                badRequest,
+                ex.getMessage()
+        );
+        log.error("Error: ", ex);
         return constructApiErrorWithHttpStatus(apiError);
     }
 

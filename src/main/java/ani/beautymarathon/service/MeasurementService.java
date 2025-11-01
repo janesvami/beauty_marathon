@@ -143,9 +143,9 @@ public class MeasurementService {
         final WkMeasurement wkMeasurement = getWkById(id);
         wkMeasurement.setClosedState(closedState);
 
-        final WkMeasurement updated = wkMeasurementRepository.save(wkMeasurement);
-        log.info("Status of week with id {} has been updated {}", id, updated);
-        return updated;
+        final WkMeasurement updatedWkMeasurement = wkMeasurementRepository.save(wkMeasurement);
+        log.info("Status of week with id {} has been updated to {}", id, updatedWkMeasurement.getClosedState());
+        return updatedWkMeasurement;
     }
 
     public MoMeasurement getMoById(long id) {
@@ -163,18 +163,14 @@ public class MeasurementService {
         } else {
             moMeasurement.setClosedState(newMoState);
             final MoMeasurement updatedMoMeasurement = moMeasurementRepository.save(moMeasurement);
-            log.info("Status of month with id {} has been updated {}", moId, updatedMoMeasurement);
+            log.info("Status of month with id {} has been updated to {}", moId, updatedMoMeasurement.getClosedState());
 
             if (ClosedState.CLOSED == newMoState) {
-
                 List<UserMaxAverageView> userMaxAverageViews = winnerRepository.findUsersWithMaxAverage(moId);
                 winnerService.createWinnersFromViews(userMaxAverageViews, moMeasurement);
                 log.info("The winner of the month has been determined!");
-
-                return updatedMoMeasurement;
             }
             return updatedMoMeasurement;
-
         }
     }
 
@@ -192,7 +188,7 @@ public class MeasurementService {
 
         if(ClosedState.CLOSED.equals(wkMeasurement.getClosedState())) {
             throw new WkMeasurementClosedException(
-                    "The week is closed. Please open the week for updating the measurement.");
+                    "The week is closed.");
         }
 
         userMeasurement.setWeight(userMeasurementView.weight());

@@ -149,7 +149,7 @@ public class MeasurementController {
     @Operation(summary = "Update week status by ID",
             description = """
                      This operation updates the status of the week for the given ID to either "OPEN" or "CLOSED".
-                    A "CLOSED" week is read-only.""",
+                    A "CLOSED" week is read-only in this method. You can change a week in the other methods.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "WkMeasurement status is updated"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",
@@ -166,7 +166,7 @@ public class MeasurementController {
     @Operation(summary = "Update month status by ID",
             description = """
                      This operation updates the status of the month for the given ID to either "OPEN" or "CLOSED".
-                    A "CLOSED" month is read-only.""",
+                    A "CLOSED" month is read-only in this method. You can change a week in the other methods.""",
             responses = {
                     @ApiResponse(responseCode = "200", description = "MoMeasurement status is updated"),
                     @ApiResponse(responseCode = "400", description = "Invalid input",
@@ -247,7 +247,8 @@ public class MeasurementController {
                 user.getStartWeight(),
                 user.getTargetWeight(),
                 user.getCreationDate(),
-                user.getDeletedState()
+                user.getDeletedState(),
+                user.getEmail()
         );
         return new GetUserMeasurementView(
                 userMeasurement.getId(),

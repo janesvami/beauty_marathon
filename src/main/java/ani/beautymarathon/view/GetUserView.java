@@ -23,5 +23,8 @@ public record GetUserView(
         LocalDate creationDate,
 
         @NotNull
-        DeletedState deletedState
+        DeletedState deletedState,
+
+        @NotNull
+        String email
 ) {}

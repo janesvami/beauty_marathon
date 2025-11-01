@@ -1,6 +1,13 @@
 package ani.beautymarathon.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,6 +41,9 @@ public class User {
     @Column(name = "deleted_state")
     private DeletedState deletedState;
 
+    @Column(name = "email")
+    private String email;
+
     public User() {
     }
 
@@ -41,16 +51,19 @@ public class User {
             String name,
             BigDecimal startWeight,
             BigDecimal targetWeight,
-            LocalDate creationDate) {
+            LocalDate creationDate,
+            String email
+    ) {
         this.name = name;
         this.startWeight = startWeight;
         this.targetWeight = targetWeight;
         this.creationDate = creationDate;
+        this.email = email;
     }
 
     @Override
     public String toString() {
-        return "User " + id + ": " + name + ", start weight: "
+        return "User " + id + ": " + name + ", " + email + ", start weight: "
                 + startWeight + ", target weight: " + targetWeight + "\n";
     }
 }

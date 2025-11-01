@@ -20,5 +20,8 @@ public record CreateUserView(
         @Min(30)
         @Max(200)
         @NotNull
-        BigDecimal targetWeight
+        BigDecimal targetWeight,
+
+        @NotNull
+        String email
 ) {}
