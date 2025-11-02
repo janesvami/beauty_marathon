@@ -1,4 +1,4 @@
-package ani.beautymarathon.view;
+package ani.beautymarathon.view.user;
 
 public interface UserMaxAverageView {
         Long getUserId();

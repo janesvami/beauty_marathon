@@ -1,4 +1,4 @@
-package ani.beautymarathon.view;
+package ani.beautymarathon.view.user;
 
 import ani.beautymarathon.entity.DeletedState;
 import jakarta.validation.constraints.NotNull;

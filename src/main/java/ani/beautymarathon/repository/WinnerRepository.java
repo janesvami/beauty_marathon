@@ -1,7 +1,7 @@
 package ani.beautymarathon.repository;
 
 import ani.beautymarathon.entity.Winner;
-import ani.beautymarathon.view.UserMaxAverageView;
+import ani.beautymarathon.view.user.UserMaxAverageView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

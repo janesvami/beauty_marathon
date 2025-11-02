@@ -1,4 +1,4 @@
-package ani.beautymarathon.view.measurement.filter.register;
+package ani.beautymarathon.view.filter_register;
 
 import ani.beautymarathon.entity.ClosedState;
 

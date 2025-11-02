@@ -1,4 +1,4 @@
-package ani.beautymarathon.view;
+package ani.beautymarathon.view.user;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -1,10 +1,10 @@
-package ani.beautymarathon.view.measurement.filter.register;
+package ani.beautymarathon.view.filter_register;
 
 import ani.beautymarathon.entity.ClosedState;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
-public record RegisterFilterWeek(
+public record RegisterWeekFilter(
         Integer year,
 
         @Max(12)

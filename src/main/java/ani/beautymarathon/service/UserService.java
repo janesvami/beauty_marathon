@@ -5,7 +5,7 @@ import ani.beautymarathon.entity.User;
 import ani.beautymarathon.exception.EmailAlreadyExistsException;
 import ani.beautymarathon.exception.UserDeletedException;
 import ani.beautymarathon.repository.UserRepository;
-import ani.beautymarathon.view.UpdateUserView;
+import ani.beautymarathon.view.user.UpdateUserView;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
