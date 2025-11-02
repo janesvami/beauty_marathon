@@ -1,6 +1,6 @@
 package ani.beautymarathon.view.filter_register;
 
 public record WinnerFilter(
-        RegisterMonthFilter month,
+        WinnerMonthFilter month,
         WinnerUserFilter user
 ) {}
