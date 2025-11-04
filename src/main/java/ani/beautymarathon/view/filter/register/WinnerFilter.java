@@ -1,4 +1,4 @@
-package ani.beautymarathon.view.filter_register;
+package ani.beautymarathon.view.filter.register;
 
 public record WinnerFilter(
         WinnerMonthFilter month,

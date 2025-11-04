@@ -1,8 +1,8 @@
-package ani.beautymarathon.view.filter_register;
+package ani.beautymarathon.view.filter.register;
 
 import ani.beautymarathon.entity.DeletedState;
 
-public record WinnerUserFilter(
+public record RegisterUserFilter(
         String name,
         DeletedState deletedState
 ) {}

@@ -4,7 +4,7 @@ import ani.beautymarathon.entity.MoMeasurement;
 import ani.beautymarathon.entity.User;
 import ani.beautymarathon.entity.Winner;
 import ani.beautymarathon.service.WinnerService;
-import ani.beautymarathon.view.filter_register.WinnerFilter;
+import ani.beautymarathon.view.filter.register.WinnerFilter;
 import ani.beautymarathon.view.measurement.GetMoMeasurementView;
 import ani.beautymarathon.view.user.GetUserView;
 import ani.beautymarathon.view.winner.GetWinnerView;

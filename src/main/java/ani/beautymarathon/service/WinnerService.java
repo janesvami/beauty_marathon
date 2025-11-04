@@ -4,7 +4,7 @@ import ani.beautymarathon.entity.MoMeasurement;
 import ani.beautymarathon.entity.User;
 import ani.beautymarathon.entity.Winner;
 import ani.beautymarathon.repository.WinnerRepository;
-import ani.beautymarathon.view.filter_register.WinnerFilter;
+import ani.beautymarathon.view.filter.register.WinnerFilter;
 import ani.beautymarathon.view.user.UserMaxAverageView;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
