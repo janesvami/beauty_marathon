@@ -1,6 +1,6 @@
 package ani.beautymarathon.view.measurement;
 
-import ani.beautymarathon.view.GetUserView;
+import ani.beautymarathon.view.user.GetUserView;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;

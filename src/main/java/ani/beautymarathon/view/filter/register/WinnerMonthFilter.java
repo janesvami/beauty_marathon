@@ -1,15 +1,15 @@
-package ani.beautymarathon.view.measurement.filter.register;
+package ani.beautymarathon.view.filter.register;
 
 import ani.beautymarathon.entity.ClosedState;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
-public record RegisterFilterWeek(
+public record WinnerMonthFilter(
         Integer year,
 
         @Max(12)
         @Min(1)
-        Integer month,
-        ClosedState wkClosedState,
-        ClosedState moClosedState
+        Integer monthNumber,
+
+        ClosedState closedState
 ) {}
