@@ -73,7 +73,7 @@ public class UserMeasurement {
                 "\nwater points: " + waterPoint +
                 "\nstep points: " + stepPoint +
                 "\ndiary points: " + diaryPoint +
-                "\nalocohol-free points: " + alcoholFreePoint +
+                "\nalcohol-free points: " + alcoholFreePoint +
                 "\n\nCommentary: " + commentary
                 ;
     }

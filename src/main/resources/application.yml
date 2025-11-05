@@ -13,6 +13,10 @@ spring:
     driver-class-name: org.postgresql.Driver
     clean-disabled: false
     validate-on-migrate: false
+  freemarker:
+      suffix: .html
+      template-loader-path: classpath:/templates/
+      check-template-location: true
 
   jpa:
     show-sql: true
