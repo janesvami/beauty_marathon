@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -48,6 +49,19 @@ public class Winner {
         return "Winner of " + moMeasurement.getMonthNumber() +
                 ", " + moMeasurement.getYear() +
                 ": user " + user.getName() +
-                "with averagePoint: " + averagePoint;
+                " with averagePoint: " + averagePoint;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Winner winner = (Winner) o;
+        return Objects.equals(id, winner.id) && Objects.equals(moMeasurement, winner.moMeasurement) && Objects.equals(user, winner.user) && Objects.equals(averagePoint, winner.averagePoint) && Objects.equals(creationDate, winner.creationDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, moMeasurement, user, averagePoint, creationDate);
     }
 }
