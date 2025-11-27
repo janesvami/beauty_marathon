@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static ani.beautymarathon.service.MeasurementsTestHelper.createTestMoMeasurement;
 import static ani.beautymarathon.service.MeasurementsTestHelper.createTestUser;
@@ -42,8 +41,7 @@ class WinnerServiceTest {
 
     @Test
     void getById_WhenWinnerIsNotFound_ThenThrowEntityNotFoundException() {
-        UUID uuid = UUID.randomUUID();
-        long id = Math.abs(uuid.getMostSignificantBits());
+        long id = 1;
         when(winnerRepository.findById(any())).thenReturn(Optional.empty());
         EntityNotFoundException entityNotFoundException = assertThrows(
                 EntityNotFoundException.class,
@@ -55,8 +53,7 @@ class WinnerServiceTest {
 
     @Test
     void getById_WhenWinnerIsFound_ThenReturnsWinner() {
-        UUID uuid = UUID.randomUUID();
-        long id = Math.abs(uuid.getMostSignificantBits());
+        long id = 1;
         LocalDate today = LocalDate.now();
         MoMeasurement testMoMeasurement = createTestMoMeasurement();
         User testUser = createTestUser();
@@ -87,8 +84,7 @@ class WinnerServiceTest {
 
     @Test
     void getAllWinners_WhenWinnersAreFound_ThenReturnsAllWinners() {
-        UUID uuid = UUID.randomUUID();
-        long id = Math.abs(uuid.getMostSignificantBits());
+        long id = 1;
         LocalDate today = LocalDate.now();
         MoMeasurement testMoMeasurement = createTestMoMeasurement();
         User testUser = createTestUser();
@@ -99,8 +95,7 @@ class WinnerServiceTest {
         winnerFirst.setAveragePoint(45.2);
         winnerFirst.setCreationDate(today);
 
-        UUID uuid2 = UUID.randomUUID();
-        long id2 = Math.abs(uuid2.getMostSignificantBits());
+        long id2 = 1;
         LocalDate today2 = LocalDate.now();
         MoMeasurement testMoMeasurement2 = createTestMoMeasurement();
         User testUser2 = createTestUser();

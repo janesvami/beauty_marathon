@@ -57,11 +57,11 @@ public class Winner {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Winner winner = (Winner) o;
-        return Objects.equals(id, winner.id) && Objects.equals(moMeasurement, winner.moMeasurement) && Objects.equals(user, winner.user) && Objects.equals(averagePoint, winner.averagePoint) && Objects.equals(creationDate, winner.creationDate);
+        return Objects.equals(id, winner.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, moMeasurement, user, averagePoint, creationDate);
+        return Objects.hash(id);
     }
 }

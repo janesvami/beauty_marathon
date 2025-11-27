@@ -8,13 +8,11 @@ import ani.beautymarathon.entity.User;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 public class MeasurementsTestHelper {
 
     public static MoMeasurement createTestMoMeasurement() {
-        UUID uuid = UUID.randomUUID();
-        long id = Math.abs(uuid.getMostSignificantBits());
+        long id = 1;
         LocalDate today = LocalDate.now();
         MoMeasurement measurement = new MoMeasurement();
         measurement.setId(id);
@@ -27,8 +25,7 @@ public class MeasurementsTestHelper {
     }
 
     public static User createTestUser() {
-        UUID uuid = UUID.randomUUID();
-        long id = Math.abs(uuid.getMostSignificantBits());
+        long id = 1;
         User user = new User();
         user.setId(id);
         user.setEmail("test@test.com");
