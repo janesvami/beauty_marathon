@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Итоги недели</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f9fc;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 28px;
+            margin: 15px 0;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin: 30px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #6a11cb;
+            color: white;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f1f3f9;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .signature {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+        .week-info {
+            background-color: #f0f7ff;
+            border-left: 4px solid #2575fc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <div class="logo">Beauty Marathon</div>
+        <h1 class="title">Промежуточные итоги</h1>
+    </div>
+
+    <div class="content">
+        <p class="greeting">Здравствуй, %s!</p>
+
+        <div class="week-info">
+            <p>Подошла к концу неделя %s месяца № %s нашего проекта, и мы подводим промежуточные итоги:</p>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Имя пользователя</th>
+                    <th>Баллы за воду</th>
+                    <th>Баллы за сон</th>
+                    <th>Баллы за шаги</th>
+                    <th>Баллы за дневник</th>
+                    <th>Баллы за трезвость</th>
+                    <th>Вес</th>
+                    <th>Баллы за вес</th>
+                    <th>Общий балл</th>
+                </tr>
+                </thead>
+                <tbody>%s</tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>С уважением,</p>
+        <p class="signature">Команда проекта Beauty Marathon</p>
+    </div>
+</div>
+</body>
+</html>

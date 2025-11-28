@@ -6,6 +6,7 @@ import ani.beautymarathon.entity.Winner;
 import ani.beautymarathon.repository.WinnerRepository;
 import ani.beautymarathon.view.filter.register.WinnerFilter;
 import ani.beautymarathon.view.user.UserMaxAverageView;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,11 @@ public class WinnerService {
             winners.add(winner);
         }
         winnerRepository.saveAll(winners);
+    }
+
+    public Winner getById(long id) {
+        return winnerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Winner with id " + id + " not found"));
     }
 
     public Page<Winner> getAllWinners(WinnerFilter filter, Pageable pageable) {

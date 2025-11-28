@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Итоги месяца</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f9fc;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 28px;
+            margin: 15px 0;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        .winner-announcement {
+            background-color: #f0f7ff;
+            border-left: 4px solid #2575fc;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .winner-name {
+            font-size: 22px;
+            color: #2575fc;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .table-container {
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        th {
+            background-color: #6a11cb;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .encouragement {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            text-align: center;
+            font-style: italic;
+        }
+        .footer {
+            background-color: #f1f3f9;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .signature {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+        .medal {
+            display: inline-block;
+            background: gold;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            text-align: center;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <div class="logo">Beauty Marathon</div>
+        <h1 class="title">Итоги месяца</h1>
+    </div>
+
+    <div class="content">
+        <p class="greeting">Здравствуй, %s!</p>
+
+        <div class="winner-announcement">
+            <p>Пришло время объявить имя победителя этого месяца, это:</p>
+            <div class="winner-name"><span class="medal">🏆</span> %s</div>
+            <p>Поздравляем победителя с выдающимися результатами!</p>
+        </div>
+
+        <p>Ниже представлены полные итоги месяца:</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Имя пользователя</th>
+                    <th>Общее число баллов</th>
+                </tr>
+                </thead>
+                <tbody>%s</tbody>
+            </table>
+        </div>
+
+        <div class="encouragement">
+            <p>Спасибо за участие в нашем проекте, продолжайте в том же духе, всё замечательно!</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>С уважением,</p>
+        <p class="signature">Команда проекта Beauty Marathon</p>
+    </div>
+</div>
+</body>
+</html>

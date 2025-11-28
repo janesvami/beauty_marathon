@@ -17,6 +17,8 @@ import jakarta.validation.Valid;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +36,24 @@ public class WinnerController {
 
     public WinnerController(WinnerService winnerService) {
         this.winnerService = winnerService;
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Get winner profile by ID",
+            description = """
+                    This operation returns the winner profile for the given ID.""",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Winner profile is received"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "404", description = "Winner is not found",
+                            content = @Content(schema = @Schema())),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = @Content(schema = @Schema()))
+            })
+    public GetWinnerView getById(@PathVariable long id) {
+        final Winner winner = winnerService.getById(id);
+        return constructWinnerView(winner);
     }
 
     @PostMapping("/all")
