@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/marathon_db
+    url: jdbc:postgresql://localhost:5432/marathon_db?Timezone=UTC
     username: postgres
     password: P@ssword12345
     driver-class-name: org.postgresql.Driver
@@ -9,7 +9,7 @@ spring:
     password: P@ssword12345
     schemas: public
     baseline-on-migrate: false
-    url: jdbc:postgresql://localhost:5432/marathon_db
+    url: jdbc:postgresql://localhost:5432/marathon_db?Timezone=UTC
     driver-class-name: org.postgresql.Driver
     clean-disabled: false
     validate-on-migrate: false
