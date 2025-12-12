@@ -1,9 +1,11 @@
-package ani.beautymarathon.service;
+package ani.beautymarathon;
 
 import ani.beautymarathon.entity.ClosedState;
 import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.MoMeasurement;
 import ani.beautymarathon.entity.User;
+import ani.beautymarathon.view.measurement.GetMoMeasurementView;
+import ani.beautymarathon.view.user.GetUserView;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,5 +36,26 @@ public class MeasurementsTestHelper {
         user.setDeletedState(DeletedState.NOT_DELETED);
         user.setName("Test name");
         return user;
+    }
+
+    public static GetMoMeasurementView createTestMoMeasurementView(MoMeasurement moMeasurement) {
+        return new GetMoMeasurementView(
+                moMeasurement.getId(),
+                moMeasurement.getClosedState(),
+                moMeasurement.getYear(),
+                moMeasurement.getMonthNumber()
+        );
+    }
+
+    public static GetUserView createTestUserView(User user) {
+        return new GetUserView(
+                user.getId(),
+                user.getName(),
+                user.getStartWeight(),
+                user.getTargetWeight(),
+                user.getCreationDate(),
+                user.getDeletedState(),
+                user.getEmail()
+        );
     }
 }
