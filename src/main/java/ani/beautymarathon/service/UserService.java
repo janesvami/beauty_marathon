@@ -34,17 +34,19 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public User getById(long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
+        return getUserById(id);
     }
 
-    public User update(long id, UpdateUserView userView) {
-        final User user = getById(id);
+    @Transactional
+    public User update(Long id, UpdateUserView userView) {
+        final User user = getUserById(id);
 
         if (user.getDeletedState() == DeletedState.DELETED) {
             throw new UserDeletedException("User with id " + id + " is deleted. Cannot update");
@@ -64,12 +66,18 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User updateStatus(long id, DeletedState deletedState) {
-        final User user = getById(id);
+        final User user = getUserById(id);
         user.setDeletedState(deletedState);
 
         final User updated = userRepository.save(user);
         log.info("Status of user with id {} has been updated {}", id, updated);
         return updated;
+    }
+
+    private User getUserById(long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
     }
 }
