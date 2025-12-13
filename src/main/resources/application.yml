@@ -14,9 +14,9 @@ spring:
     clean-disabled: false
     validate-on-migrate: false
   freemarker:
-      suffix: .html
-      template-loader-path: classpath:/templates/
-      check-template-location: true
+    suffix: .html
+    template-loader-path: classpath:/templates/
+    check-template-location: true
 
   jpa:
     show-sql: true
@@ -24,3 +24,28 @@ spring:
       hibernate.format_sql: true
       hibernate.use_sql_comments: true
       hibernate.highlight_sql: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: notificationRequest:ani.beautymarathon.entity.NotificationRequest
+        spring.json.add.type.headers: true
+      retries: 3
+      acks: all
+
+---
+spring:
+  config:
+    activate:
+      on-profile: no-docker
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
