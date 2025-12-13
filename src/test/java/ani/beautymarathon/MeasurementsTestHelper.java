@@ -26,6 +26,18 @@ public class MeasurementsTestHelper {
         return measurement;
     }
 
+    public static MoMeasurement createTestMoMeasurement(Long id) {
+        LocalDate today = LocalDate.now();
+        MoMeasurement measurement = new MoMeasurement();
+        measurement.setId(id);
+        measurement.setMonthNumber(9);
+        measurement.setYear(2025);
+        measurement.setMoDate(today);
+        measurement.setClosedState(ClosedState.CLOSED);
+        measurement.setWkMeasurements(List.of());
+        return measurement;
+    }
+
     public static User createTestUser() {
         long id = 1;
         User user = new User();

@@ -36,6 +36,7 @@ import static ani.beautymarathon.MeasurementsTestHelper.createTestUserView;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,8 +47,6 @@ class WinnerControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
     @MockitoBean
     private WinnerService winnerService;
 
@@ -94,6 +93,7 @@ class WinnerControllerTest {
     @Test
     void getAllWinners_WhenFound_ThenSuccess() throws Exception {
         long id = 1;
+        Double averagePoint = 45.2;
         LocalDate today = LocalDate.now();
         MoMeasurement testMoMeasurement = createTestMoMeasurement();
         User testUser = createTestUser();
@@ -101,10 +101,11 @@ class WinnerControllerTest {
         winnerFirst.setId(id);
         winnerFirst.setMoMeasurement(testMoMeasurement);
         winnerFirst.setUser(testUser);
-        winnerFirst.setAveragePoint(45.2);
+        winnerFirst.setAveragePoint(averagePoint);
         winnerFirst.setCreationDate(today);
 
         long id2 = 2;
+        Double averagePoint2 = 38.5;
         LocalDate today2 = LocalDate.now().minusDays(1);
         MoMeasurement testMoMeasurement2 = createTestMoMeasurement();
         User testUser2 = createTestUser();
@@ -112,42 +113,40 @@ class WinnerControllerTest {
         winnerSecond.setId(id2);
         winnerSecond.setMoMeasurement(testMoMeasurement2);
         winnerSecond.setUser(testUser2);
-        winnerSecond.setAveragePoint(45.2);
+        winnerSecond.setAveragePoint(averagePoint2);
         winnerSecond.setCreationDate(today2);
 
         Pageable pageable = PageRequest.of(0, 5);
         List<Winner> expectedWinners = Arrays.asList(winnerFirst, winnerSecond);
-        Page<Winner> mockPage = new PageImpl<>(expectedWinners, pageable, 25);
+        Page<Winner> mockPage = new PageImpl<>(expectedWinners, pageable, 2);
 
-        when(winnerService.getAllWinners(any(WinnerFilter.class), any(Pageable.class)))
-                .thenReturn(mockPage);
+        when(winnerService.getAllWinners(any(), any())).thenReturn(mockPage);
 
         WinnerMonthFilter monthFilter = new WinnerMonthFilter(2025, 9, ClosedState.CLOSED);
         WinnerUserFilter userFilter = new WinnerUserFilter("Fesha", DeletedState.NOT_DELETED);
         WinnerFilter filter = new WinnerFilter(monthFilter, userFilter);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());        String filterJson = objectMapper.writeValueAsString(filter);
+        objectMapper.registerModule(new JavaTimeModule());
+        String filterJson = objectMapper.writeValueAsString(filter);
 
         GetWinnerView firstWinnerView = new GetWinnerView(
                 id,
                 createTestMoMeasurementView(testMoMeasurement),
                 createTestUserView(testUser),
-                winnerFirst.getAveragePoint(),
-                winnerFirst.getCreationDate()
+                averagePoint,
+                today
         );
 
         GetWinnerView secondWinnerView = new GetWinnerView(
                 id2,
                 createTestMoMeasurementView(testMoMeasurement2),
                 createTestUserView(testUser2),
-                winnerSecond.getAveragePoint(),
-                winnerSecond.getCreationDate()
+                averagePoint2,
+                today2
         );
 
-
-
-        mockMvc.perform(get("/winners/all")
+        mockMvc.perform(post("/winners/all")
                         .param("page", "0")
                         .param("size", "5")
                         .param("sort", "id,asc")
@@ -162,14 +161,11 @@ class WinnerControllerTest {
                 .andExpect(jsonPath("$.number").value(0))
                 .andExpect(jsonPath("$.first").value(true))
                 .andExpect(jsonPath("$.last").value(true))
-                .andExpect(jsonPath("$.content[0].id").value(1))
-                .andExpect(jsonPath("$.content[0].averagePoint").value(45.2))
-                .andExpect(jsonPath("$.content[0].creationDate").value(today.toString()))
-                .andExpect(jsonPath("$.content[1].id").value(2))
-                .andExpect(jsonPath("$.content[1].averagePoint").value(38.5))
-                .andExpect(jsonPath("$.content[1].creationDate").value(today.minusDays(1).toString()));
+                .andExpect(jsonPath("$.content[0].id").value(firstWinnerView.id()))
+                .andExpect(jsonPath("$.content[0].averagePoint").value(firstWinnerView.averagePoint()))
+                .andExpect(jsonPath("$.content[0].creationDate").value(firstWinnerView.creationDate().toString()))
+                .andExpect(jsonPath("$.content[1].id").value(secondWinnerView.id()))
+                .andExpect(jsonPath("$.content[1].averagePoint").value(secondWinnerView.averagePoint()))
+                .andExpect(jsonPath("$.content[1].creationDate").value(secondWinnerView.creationDate().toString()));
     }
-
-
-
 }
