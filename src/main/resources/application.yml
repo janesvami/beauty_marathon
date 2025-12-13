@@ -25,6 +25,12 @@ spring:
       hibernate.use_sql_comments: true
       hibernate.highlight_sql: true
 
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
   kafka:
     bootstrap-servers: localhost:9092
     producer:
@@ -35,3 +41,11 @@ spring:
         spring.json.add.type.headers: true
       retries: 3
       acks: all
+
+---
+spring:
+  config:
+    activate:
+      on-profile: no-docker
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration

@@ -2,6 +2,7 @@ package ani.beautymarathon.service;
 
 import ani.beautymarathon.entity.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
@@ -16,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
+@Profile("docker")
 public class KafkaNotificationProducer {
 
     private static final String TOPIC = "notifications-topic";
@@ -31,25 +33,25 @@ public class KafkaNotificationProducer {
     /**
      * Synchronous sending with waiting for result
      * @param request Request to send notification
-     * @return Result of sending
-     * @throws Exception if sending throws an error
+     * @throws RuntimeException if sending throws an error
      */
-    public SendResult<String, NotificationRequest> sendNotificationSync(NotificationRequest request)
-            throws Exception {
-        return sendNotificationSyncWithKey(UUID.randomUUID().toString(), request);
+    public void sendNotificationSync(NotificationRequest request) {
+        sendNotificationSyncWithKey(UUID.randomUUID().toString(), request);
     }
 
     /**
      * Synchronous sending with custom key
      * @param key Message key
      * @param request Request to send notification
-     * @return Sending result
-     * @throws Exception If sending error
+     * @throws RuntimeException If sending error
      */
-    public SendResult<String, NotificationRequest> sendNotificationSyncWithKey(
-            String key, NotificationRequest request) throws Exception {
+    public void sendNotificationSyncWithKey(
+            String key, NotificationRequest request) {
 
-        if (!canSendNotification(request)) {throw new Exception("Can't send notification");}
+        if (!canSendNotification(request)) {
+            //TODO: create a special exception class
+            throw new RuntimeException("Can't send notification");
+        }
 
         try {
             log.info("🔄 Sending notification synchronously. Key: '{}'", key);
@@ -72,10 +74,10 @@ public class KafkaNotificationProducer {
                     result.getRecordMetadata().partition(),
                     result.getRecordMetadata().offset());
 
-            return result;
+            log.info("Result of sending notification: {}", result);
         } catch (Exception e) {
             log.error("❌ Failed to send notification synchronously. Key: '{}'", key, e);
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 
