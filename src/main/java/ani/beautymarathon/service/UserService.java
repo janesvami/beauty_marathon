@@ -69,11 +69,16 @@ public class UserService {
     @Transactional
     public User updateStatus(long id, DeletedState deletedState) {
         final User user = getUserById(id);
-        user.setDeletedState(deletedState);
+        final DeletedState previousState = user.getDeletedState();
+        if(previousState != deletedState) {
+            user.setDeletedState(deletedState);
 
-        final User updated = userRepository.save(user);
-        log.info("Status of user with id {} has been updated {}", id, updated);
-        return updated;
+            final User updated = userRepository.save(user);
+            log.info("Status of user with id {} has been updated {}", id, updated);
+            return updated;
+        } else {
+            return user;
+        }
     }
 
     private User getUserById(long id) {
