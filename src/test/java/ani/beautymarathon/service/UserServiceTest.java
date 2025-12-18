@@ -220,7 +220,7 @@ class UserServiceTest {
     }
 
     @Test
-    void updateStatus_WhenTheUserIsAlreadyHasRequiredStatus_ThenReturnsUser() {
+    void updateStatus_WhenTheNewStatusIsEqualToTheCurrent_ThenReturnsUser() {
         User user = createTestUser();
         DeletedState deletedState = DeletedState.NOT_DELETED;
         user.setDeletedState(deletedState);
