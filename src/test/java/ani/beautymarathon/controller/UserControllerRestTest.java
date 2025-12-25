@@ -56,6 +56,7 @@ class UserControllerRestTest {
         mockMvc.perform(post("/users/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUserView)))
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(user.getName()))
                 .andExpect(jsonPath("$.startWeight").value(user.getStartWeight()))
                 .andExpect(jsonPath("$.targetWeight").value(user.getTargetWeight()))
@@ -215,8 +216,6 @@ class UserControllerRestTest {
                     "email": "test"
                 }
                 """;
-
-        when(userService.update(any(), any())).thenReturn(user);
 
         mockMvc.perform(put("/users/update/" + user.getId())
                         .contentType(MediaType.APPLICATION_JSON)
