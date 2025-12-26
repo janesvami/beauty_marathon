@@ -42,13 +42,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WinnerController.class)
 @AutoConfigureMockMvc
-class WinnerControllerTest {
+class WinnerControllerRestTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private WinnerService winnerService;
+
 
     @Test
     void getById_WhenFound_ThenSuccess() throws Exception {
