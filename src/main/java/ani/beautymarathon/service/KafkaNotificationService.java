@@ -18,6 +18,6 @@ public class KafkaNotificationService implements NotificationService {
      * Sends a simple email notification
      */
     public void sendSimpleEmail(NotificationRequest notificationRequest) {
-        kafkaProducer.sendNotificationSync(notificationRequest);
+        kafkaProducer.sendNotification(notificationRequest);
     }
 }

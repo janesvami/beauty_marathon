@@ -1,11 +1,11 @@
 package ani.beautymarathon.service;
 
 import ani.beautymarathon.entity.NotificationRequest;
+import ani.beautymarathon.exception.KafkaException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -31,26 +30,25 @@ public class KafkaNotificationProducer {
     }
 
     /**
-     * Synchronous sending with waiting for result
+     * Sending with waiting for result
      * @param request Request to send notification
      * @throws RuntimeException if sending throws an error
      */
-    public void sendNotificationSync(NotificationRequest request) {
-        sendNotificationSyncWithKey(UUID.randomUUID().toString(), request);
+    public void sendNotification(NotificationRequest request) {
+        sendNotificationWithKey(UUID.randomUUID().toString(), request);
     }
 
     /**
-     * Synchronous sending with custom key
+     * Sending with custom key
      * @param key Message key
      * @param request Request to send notification
-     * @throws RuntimeException If sending error
+     * @throws RuntimeException if sending error
      */
-    public void sendNotificationSyncWithKey(
+    public void sendNotificationWithKey(
             String key, NotificationRequest request) {
 
         if (!canSendNotification(request)) {
-            //TODO: create a special exception class
-            throw new RuntimeException("Can't send notification");
+            throw new KafkaException("Can't send notification");
         }
 
         try {
@@ -65,18 +63,10 @@ public class KafkaNotificationProducer {
                     .setHeader("message-type", "EMAIL")
                     .build();
 
-            CompletableFuture<SendResult<String, NotificationRequest>> future =
-                    kafkaTemplate.send(message);
+            kafkaTemplate.send(message);
 
-            SendResult<String, NotificationRequest> result = future.get();
-
-            log.info("✅ Sync notification sent. Partition: {}, Offset: {}",
-                    result.getRecordMetadata().partition(),
-                    result.getRecordMetadata().offset());
-
-            log.info("Result of sending notification: {}", result);
         } catch (Exception e) {
-            log.error("❌ Failed to send notification synchronously. Key: '{}'", key, e);
+            log.error("❌ Failed to send notification. Key: '{}'", key, e);
             throw new RuntimeException(e);
         }
     }
