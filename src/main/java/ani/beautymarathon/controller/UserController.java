@@ -127,7 +127,7 @@ public class UserController {
                     @ApiResponse(responseCode = "500", description = "Server error",
                             content = @Content(schema = @Schema()))
             })
-    public GetUserView updateUserView(@PathVariable Long id, @RequestBody UpdateUserView userView) {
+    public GetUserView updateUserView(@PathVariable Long id, @Valid @RequestBody UpdateUserView userView) {
         final User updatedUser = userService.update(id, userView);
         return constructUserView(updatedUser);
     }
