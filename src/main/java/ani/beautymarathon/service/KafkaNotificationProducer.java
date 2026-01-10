@@ -52,7 +52,7 @@ public class KafkaNotificationProducer {
         }
 
         try {
-            log.info("🔄 Sending notification synchronously. Key: '{}'", key);
+            log.info("🔄 Sending notification. Key: '{}'", key);
 
             Message<NotificationRequest> message = MessageBuilder
                     .withPayload(request)
@@ -67,7 +67,7 @@ public class KafkaNotificationProducer {
 
         } catch (Exception e) {
             log.error("❌ Failed to send notification. Key: '{}'", key, e);
-            throw new RuntimeException(e);
+            throw new KafkaException(e.getMessage());
         }
     }
 
