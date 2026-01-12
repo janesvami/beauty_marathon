@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static ani.beautymarathon.MeasurementsTestHelper.createTestMoMeasurement;
-import static ani.beautymarathon.MeasurementsTestHelper.createTestUser;
+import static ani.beautymarathon.UserTestHelper.createTestUser;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -31,8 +31,8 @@ import java.util.List;
 
 import static ani.beautymarathon.MeasurementsTestHelper.createTestMoMeasurement;
 import static ani.beautymarathon.MeasurementsTestHelper.createTestMoMeasurementView;
-import static ani.beautymarathon.MeasurementsTestHelper.createTestUser;
-import static ani.beautymarathon.MeasurementsTestHelper.createTestUserView;
+import static ani.beautymarathon.UserTestHelper.createTestUser;
+import static ani.beautymarathon.UserTestHelper.createTestUserView;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

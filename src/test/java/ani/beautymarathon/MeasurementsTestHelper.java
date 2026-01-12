@@ -1,10 +1,13 @@
 package ani.beautymarathon;
 
 import ani.beautymarathon.entity.ClosedState;
-import ani.beautymarathon.entity.DeletedState;
 import ani.beautymarathon.entity.MoMeasurement;
 import ani.beautymarathon.entity.User;
+import ani.beautymarathon.entity.UserMeasurement;
+import ani.beautymarathon.entity.WkMeasurement;
 import ani.beautymarathon.view.measurement.GetMoMeasurementView;
+import ani.beautymarathon.view.measurement.GetUserMeasurementView;
+import ani.beautymarathon.view.measurement.GetWkMeasurementView;
 import ani.beautymarathon.view.user.GetUserView;
 
 import java.math.BigDecimal;
@@ -26,28 +29,36 @@ public class MeasurementsTestHelper {
         return measurement;
     }
 
-    public static MoMeasurement createTestMoMeasurement(Long id) {
-        LocalDate today = LocalDate.now();
-        MoMeasurement measurement = new MoMeasurement();
-        measurement.setId(id);
-        measurement.setMonthNumber(9);
-        measurement.setYear(2025);
-        measurement.setMoDate(today);
-        measurement.setClosedState(ClosedState.CLOSED);
-        measurement.setWkMeasurements(List.of());
-        return measurement;
+    public static WkMeasurement createTestWkMeasurement() {
+        long id = 1;
+        MoMeasurement moMeasurement = createTestMoMeasurement();
+        WkMeasurement wkMeasurement = new WkMeasurement();
+        wkMeasurement.setId(id);
+        wkMeasurement.setMoMeasurement(moMeasurement);
+        wkMeasurement.setClosedState(ClosedState.OPEN);
+        wkMeasurement.setMeasurementDate(LocalDate.now());
+        wkMeasurement.setCommentary("test");
+        return wkMeasurement;
     }
 
-    public static User createTestUser() {
+    public static UserMeasurement createTestUserMeasurement() {
         long id = 1;
-        User user = new User();
-        user.setId(id);
-        user.setEmail("test@test.com");
-        user.setStartWeight(new BigDecimal("66.3"));
-        user.setTargetWeight(new BigDecimal("50.0"));
-        user.setDeletedState(DeletedState.NOT_DELETED);
-        user.setName("Test name");
-        return user;
+        WkMeasurement wkMeasurement = createTestWkMeasurement();
+        User user = UserTestHelper.createTestUser();
+        UserMeasurement userMeasurement = new UserMeasurement();
+        userMeasurement.setId(id);
+        userMeasurement.setWkMeasurement(wkMeasurement);
+        userMeasurement.setUser(user);
+        userMeasurement.setWaterPoint(5);
+        userMeasurement.setStepPoint(7);
+        userMeasurement.setSleepPoint(3);
+        userMeasurement.setDiaryPoint(2);
+        userMeasurement.setAlcoholFreePoint(10);
+        userMeasurement.setWeightPoint(0);
+        userMeasurement.setWeight(new BigDecimal(65));
+        userMeasurement.setCommentary("test measurement");
+
+        return userMeasurement;
     }
 
     public static GetMoMeasurementView createTestMoMeasurementView(MoMeasurement moMeasurement) {
@@ -59,15 +70,39 @@ public class MeasurementsTestHelper {
         );
     }
 
-    public static GetUserView createTestUserView(User user) {
-        return new GetUserView(
-                user.getId(),
-                user.getName(),
-                user.getStartWeight(),
-                user.getTargetWeight(),
-                user.getCreationDate(),
-                user.getDeletedState(),
-                user.getEmail()
+    public static GetWkMeasurementView createTestWkMeasurementView(WkMeasurement wkMeasurement) {
+        MoMeasurement moMeasurement = createTestMoMeasurement();
+        GetMoMeasurementView moMeasurementView = createTestMoMeasurementView(moMeasurement);
+
+        return new GetWkMeasurementView(
+                wkMeasurement.getId(),
+                wkMeasurement.getMeasurementDate(),
+                wkMeasurement.getClosedState(),
+                wkMeasurement.getCommentary(),
+                moMeasurementView
+        );
+
+    }
+
+    public static GetUserMeasurementView createTestUserMeasurementView(UserMeasurement userMeasurement){
+        User user = UserTestHelper.createTestUser();
+        GetUserView userView = UserTestHelper.createTestUserView(user);
+        WkMeasurement wkMeasurement = createTestWkMeasurement();
+        GetWkMeasurementView wkMeasurementView = createTestWkMeasurementView(wkMeasurement);
+
+        return new GetUserMeasurementView(
+                userMeasurement.getId(),
+                userMeasurement.getWeight(),
+                userMeasurement.getWeightPoint(),
+                userMeasurement.getSleepPoint(),
+                userMeasurement.getWaterPoint(),
+                userMeasurement.getStepPoint(),
+                userMeasurement.getDiaryPoint(),
+                userMeasurement.getAlcoholFreePoint(),
+                userMeasurement.getTotalPoint(),
+                userMeasurement.getCommentary(),
+                wkMeasurementView,
+                userView
         );
     }
 }

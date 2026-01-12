@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ani.beautymarathon.MeasurementsTestHelper.createTestUser;
+import static ani.beautymarathon.UserTestHelper.createTestUser;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
