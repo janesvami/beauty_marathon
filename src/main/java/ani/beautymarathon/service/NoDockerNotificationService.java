@@ -15,7 +15,7 @@ public class NoDockerNotificationService implements NotificationService {
     /**
      * Stub method for no docker environment
      */
-    public void sendSimpleEmail(NotificationRequest notificationRequest) {
+    public void sendEmail(NotificationRequest notificationRequest) {
         log.info("The message will not be send. The method is stub");
     }
 }

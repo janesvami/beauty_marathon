@@ -1,5 +1,7 @@
 package ani.beautymarathon.entity;
 
+import ani.beautymarathon.service.KafkaMessage;
+
 import java.util.List;
 /**
  * Represents a request for sending an email notification.
@@ -13,4 +15,4 @@ public record NotificationRequest (
         List<String> addressesTo,
         String subject,
         String text
-) {}
+) implements KafkaMessage {}

@@ -4,5 +4,5 @@ import ani.beautymarathon.entity.NotificationRequest;
 
 public interface NotificationService {
 
-    void sendSimpleEmail(NotificationRequest notificationRequest);
+    void sendEmail(NotificationRequest notificationRequest);
 }
