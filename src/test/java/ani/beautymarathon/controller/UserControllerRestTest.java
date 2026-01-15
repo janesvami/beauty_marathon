@@ -207,7 +207,7 @@ class UserControllerRestTest {
 
     @Test
     void updateUserView_WhenInvalidValues_ThenBadRequest() throws Exception {
-        User user = createTestUser();
+        long id = 1;
         String badJson = """
                 {
                     "name": 13,
@@ -217,7 +217,7 @@ class UserControllerRestTest {
                 }
                 """;
 
-        mockMvc.perform(put("/users/update/" + user.getId())
+        mockMvc.perform(put("/users/update/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(badJson))
                 .andExpect(status().isBadRequest())

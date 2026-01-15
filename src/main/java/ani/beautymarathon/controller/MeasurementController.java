@@ -191,7 +191,7 @@ public class MeasurementController {
                             content = @Content(schema = @Schema()))
             })
     public GetUserMeasurementView updateUserMeasurementView(
-            @PathVariable Long id, @RequestBody UpdateUserMeasurementView userMeasurementView
+            @PathVariable Long id, @Valid @RequestBody UpdateUserMeasurementView userMeasurementView
     ) {
         final UserMeasurement updatedUser = measurementService.updateMeasurement(id, userMeasurementView);
         return constructUserMeasurementView(updatedUser);
