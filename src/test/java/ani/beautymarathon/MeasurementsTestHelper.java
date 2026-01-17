@@ -81,7 +81,6 @@ public class MeasurementsTestHelper {
                 wkMeasurement.getCommentary(),
                 moMeasurementView
         );
-
     }
 
     public static GetUserMeasurementView createTestUserMeasurementView(UserMeasurement userMeasurement){

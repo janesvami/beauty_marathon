@@ -412,6 +412,31 @@ class MeasurementServiceTest {
     }
 
     @Test
+    void updateMoStatus__WhenMoMeasurementIsNotFound_ThenThrowEntityNotFoundException() {
+        MoMeasurement moMeasurement = createTestMoMeasurement();
+
+        when(moMeasurementRepository.findById(any())).thenReturn(Optional.empty());
+        EntityNotFoundException ex = assertThrows(
+                EntityNotFoundException.class,
+                () -> measurementService.updateMoStatus(moMeasurement.getId(), moMeasurement.getClosedState())
+        );
+        String expectedMessage = "MoMeasurement with id " + moMeasurement.getId() + " not found";
+
+        assertEquals(expectedMessage, ex.getMessage());
+    }
+
+    @Test
+    void updateMoStatus__WhenUpdatingIsSuccessful_ThenReturnsUpdatedWkMeasurement() {
+        MoMeasurement moMeasurement = createTestMoMeasurement();
+
+        when(moMeasurementRepository.findById(any())).thenReturn(Optional.of(moMeasurement));
+        when(moMeasurementRepository.save(any())).thenReturn(moMeasurement);
+        MoMeasurement result = measurementService.updateMoStatus(moMeasurement.getId(), moMeasurement.getClosedState());
+
+        assertEquals(moMeasurement, result);
+    }
+
+    @Test
     void getMeasurementById_WhenMeasurementIsNotFound_ThenThrowEntityNotFoundException() {
         long id = 1;
 

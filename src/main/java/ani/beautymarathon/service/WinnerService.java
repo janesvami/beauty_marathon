@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class WinnerService {
             final User winnerUserId = userService.getById(userMaxId);
             winner.setUser(winnerUserId);
             winner.setMoMeasurement(moMeasurement);
-
+            winner.setCreationDate(LocalDate.now());
             winners.add(winner);
         }
         winnerRepository.saveAll(winners);
