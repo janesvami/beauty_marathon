@@ -22,6 +22,6 @@ public class KafkaController {
                 "subject",
                 "text"
         );
-        notificationService.sendSimpleEmail(notificationRequest);
+        notificationService.sendEmail(notificationRequest);
     }
 }
