@@ -47,7 +47,6 @@ import java.util.List;
 )
 @RequestMapping("/measurements")
 public class MeasurementController {
-
     private final MeasurementService measurementService;
 
     public MeasurementController(MeasurementService measurementService) {

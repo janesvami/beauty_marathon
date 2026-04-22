@@ -18,7 +18,6 @@ import java.util.Map;
 @Configuration
 @Profile("docker")
 public class KafkaProducerConfig {
-
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 

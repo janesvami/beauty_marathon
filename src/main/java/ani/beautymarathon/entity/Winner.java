@@ -24,7 +24,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Table(name = "winner")
 public class Winner {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

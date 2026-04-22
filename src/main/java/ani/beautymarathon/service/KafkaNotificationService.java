@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Profile("docker")
 @RequiredArgsConstructor
 public class KafkaNotificationService implements NotificationService {
-
     private final KafkaNotificationProducer kafkaProducer;
 
     /**

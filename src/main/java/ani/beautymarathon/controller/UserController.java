@@ -116,6 +116,7 @@ public class UserController {
         return constructUserView(updatedUser);
     }
 
+
     @PutMapping("/update/{id}")
     @Operation(summary = "Update user profile",
             description = """

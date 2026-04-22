@@ -19,7 +19,6 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 @Profile("docker")
 public class KafkaNotificationProducer {
-
     private static final String TOPIC = "notifications-topic";
     private static final DateTimeFormatter TIMESTAMP_FORMATTER =
             DateTimeFormatter.ISO_LOCAL_DATE_TIME;

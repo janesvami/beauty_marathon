@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record CreateUserMeasurementView(
-
         @NotNull
         @JsonProperty("wkMeasurementId")
         Long wkMeasurementId,

@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Table(name = "user_measurement")
 public class UserMeasurement {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -46,7 +45,7 @@ public class UserMeasurement {
     @Column(name = "diary_points")
     private Integer diaryPoint;
 
-    @Column(name = "alcohol_free_points")
+    @Column(name = "alcohol_free_points", columnDefinition = "SMALLINT")
     private Integer alcoholFreePoint;
 
     @Column(name = "commentary")

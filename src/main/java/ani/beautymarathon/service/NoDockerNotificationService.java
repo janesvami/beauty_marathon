@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Profile("no-docker")
 @RequiredArgsConstructor
 public class NoDockerNotificationService implements NotificationService {
-
     /**
      * Stub method for no docker environment
      */
