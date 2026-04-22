@@ -99,5 +99,4 @@ public class ApiExceptionHandler {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<>(apiError, headers, apiError.status());
     }
-
 }

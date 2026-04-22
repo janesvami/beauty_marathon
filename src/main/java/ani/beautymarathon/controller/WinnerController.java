@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 )
 @RequestMapping("/winners")
 public class WinnerController {
-
     private final WinnerService winnerService;
 
     public WinnerController(WinnerService winnerService) {

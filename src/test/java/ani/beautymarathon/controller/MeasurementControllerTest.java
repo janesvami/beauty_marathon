@@ -165,6 +165,7 @@ class MeasurementControllerTest {
                 .andExpect(jsonPath("$.message", containsString("alcoholFreePoint")));
     }
 
+
     @Test
     void createUserMeasurement_WhenUserNotFound_Then404() throws Exception {
         CreateUserMeasurementView createUserMeasurementView = new CreateUserMeasurementView(

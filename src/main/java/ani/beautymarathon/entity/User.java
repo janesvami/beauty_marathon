@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "user_profile")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

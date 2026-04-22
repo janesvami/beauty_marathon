@@ -205,7 +205,6 @@ public class MeasurementService {
         return updatedUserMeasurement;
     }
 
-
     private Page<UserMeasurement> searchUserMeasurementsByQbe(UserMeasurementFilter filter, Pageable pageable) {
         final var probe = new UserMeasurement();
         final var filterUser = filter.user();

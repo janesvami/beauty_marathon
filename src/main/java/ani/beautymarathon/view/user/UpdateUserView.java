@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record UpdateUserView(
-
         @NotBlank
         @NotNull
         String name,
@@ -28,4 +27,3 @@ public record UpdateUserView(
         @Email
         String email
 ){}
-

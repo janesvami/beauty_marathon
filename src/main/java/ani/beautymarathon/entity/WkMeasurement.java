@@ -22,7 +22,6 @@ import java.util.List;
 @Entity
 @Table(name = "wk_measurement")
 public class WkMeasurement {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -44,22 +43,6 @@ public class WkMeasurement {
 
     @OneToMany(mappedBy = "wkMeasurement")
     private List<UserMeasurement> userMeasurements;
-
-    public WkMeasurement(
-            Long id,
-            LocalDate measurementDate,
-            ClosedState closedState,
-            String commentary,
-            MoMeasurement moMeasurement,
-            List<UserMeasurement> userMeasurements
-    ) {
-        this.id = id;
-        this.measurementDate = measurementDate;
-        this.closedState = closedState;
-        this.commentary = commentary;
-        this.moMeasurement = moMeasurement;
-        this.userMeasurements = userMeasurements;
-    }
 
     public WkMeasurement() {
     }
